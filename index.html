@@ -214,6 +214,55 @@
       box-shadow: 0 16px 32px rgba(0, 0, 0, .22);
     }
 
+    .social-links {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px auto 0;
+    }
+
+    .social-link {
+      min-height: 52px;
+      padding: 12px 18px 12px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(201, 154, 62, .48);
+      border-radius: 999px;
+      background: rgba(255, 253, 248, .86);
+      color: var(--sapphire);
+      font-size: 16px;
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(8, 19, 31, .1);
+    }
+
+    .social-icon {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .social-link.facebook .social-icon {
+      background: #1877f2;
+    }
+
+    .social-link.instagram .social-icon {
+      background: linear-gradient(135deg, #f58529, #dd2a7b 46%, #8134af 78%, #515bd4);
+    }
+
+    .social-link.youtube .social-icon {
+      background: #ff0033;
+    }
+
     .button.secondary {
       background: rgba(255, 253, 248, .72);
       color: var(--sapphire);
@@ -556,6 +605,11 @@
         <div class="meta">Нумерология<br>Таро<br>Астрология<br>Руны</div>
       </div>
       <div class="logo-mark"><img src="assets/elar-logo-reference.png" alt=""></div>
+      <nav class="social-links" aria-label="Социальные сети">
+        <a class="social-link facebook" href="https://www.facebook.com/inna.mazurok.252196" target="_blank" rel="noreferrer"><span class="social-icon">F</span><span>Facebook</span></a>
+        <a class="social-link instagram" href="https://www.instagram.com/felitzia1669?utm_source=ig_web_button_share_sheet&amp;igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer"><span class="social-icon">IG</span><span>Instagram</span></a>
+        <a class="social-link youtube" href="https://www.youtube.com/@felizia1669" target="_blank" rel="noreferrer"><span class="social-icon">YT</span><span>YouTube</span></a>
+      </nav>
       <div class="hero-copy">
         <p class="eyebrow">Каталог консультаций</p>
         <h1>13 сфер для разбора жизненного пути</h1>
@@ -783,6 +837,11 @@
         <a class="button" href="https://t.me/Inna1661" target="_blank" rel="noreferrer">Написать в Telegram</a>
         <a class="button secondary" href="#package">Посмотреть пакет</a>
       </div>
+      <nav class="social-links" aria-label="Социальные сети">
+        <a class="social-link facebook" href="https://www.facebook.com/inna.mazurok.252196" target="_blank" rel="noreferrer"><span class="social-icon">F</span><span>Facebook</span></a>
+        <a class="social-link instagram" href="https://www.instagram.com/felitzia1669?utm_source=ig_web_button_share_sheet&amp;igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer"><span class="social-icon">IG</span><span>Instagram</span></a>
+        <a class="social-link youtube" href="https://www.youtube.com/@felizia1669" target="_blank" rel="noreferrer"><span class="social-icon">YT</span><span>YouTube</span></a>
+      </nav>
     </div>
   </section>
 </body>
