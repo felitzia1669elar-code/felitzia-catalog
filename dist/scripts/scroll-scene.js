@@ -154,7 +154,7 @@ async function loadScrollVideo(video) {
  const scene=document.querySelector('.footer-journey');
  if(!scene) return;
  const stage=scene.querySelector('.footer-stage'), film=scene.querySelector('.footer-film');
- const still=scene.querySelector('.footer-still'), white=scene.querySelector('.footer-white');
+ const still=scene.querySelector('.footer-still');
  const board=scene.querySelector('.footer-board'), nav=document.querySelector('.site-nav');
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const clamp=v=>Math.max(0,Math.min(1,v));
@@ -163,7 +163,7 @@ async function loadScrollVideo(video) {
  function render(){
   raf=0;
   const animated=ready&&!reduced.matches&&!failed;
-  scene.classList.toggle('is-scrubbing',animated);
+  scene.classList.toggle('is-scrubbing',!reduced.matches&&!failed);
   const navH=nav.getBoundingClientRect().height;
   scene.style.setProperty('--footer-nav',navH+'px');
   const w=stage.clientWidth,h=stage.clientHeight;
@@ -171,13 +171,16 @@ async function loadScrollVideo(video) {
   const left=Math.max(16,dx+280*scale),right=Math.min(w-16,dx+1064*scale);
   board.style.left=left+'px';board.style.width=(right-left)+'px';
   board.style.top=(dy+210*scale)+'px';board.style.height=(380*scale)+'px';
-  if(!animated){film.style.opacity=0;still.style.opacity=1;white.style.opacity=0;board.style.opacity=1;board.style.visibility='visible';board.inert=false;return;}
+  if(!animated){
+   const fallback=reduced.matches||failed;
+   film.style.opacity=0;still.style.opacity=fallback?1:0;
+   board.style.opacity=fallback?1:0;board.style.visibility=fallback?'visible':'hidden';board.inert=!fallback;return;
+  }
   const p=clamp((navH-scene.getBoundingClientRect().top)/Math.max(1,scene.offsetHeight-stage.offsetHeight));
-  const t=clamp((p-.08)/.72);
+  const t=clamp(p/.80);
   target=t*Math.max(0,film.duration-.045);seek();
   const finished=p>=.82&&film.currentTime>=film.duration-.15;
   film.style.opacity=1;still.style.opacity=finished?1:0;
-  white.style.opacity=1-clamp(p/.12);
   board.style.opacity=finished?1:0;board.style.visibility=finished?'visible':'hidden';board.inert=!finished;
  }
  function queue(){if(!raf)raf=requestAnimationFrame(render);}

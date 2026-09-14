@@ -79,9 +79,9 @@ section[id] { scroll-margin-top: 100px; }
 .footer-stage { position:relative; height:var(--footer-height); min-height:520px; overflow:hidden; }
 .footer-journey.is-scrubbing { height:calc(var(--footer-height) + 200svh); }
 .footer-journey.is-scrubbing .footer-stage { position:sticky; top:var(--footer-nav); }
-.footer-film,.footer-still,.footer-white { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; pointer-events:none; }
+.footer-first,.footer-film,.footer-still { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; pointer-events:none; }
 .footer-film { opacity:0; }
-.footer-white { background:#fffdf8; opacity:0; }
+.footer-still { opacity:0; }
 #contact .footer-board { position:absolute; left:21%; top:27%; width:58%; height:50%; max-width:none; padding:14px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:20px; text-align:center; }
 #contact .footer-board h2 { color:#173e63; font-size:clamp(28px,4vw,56px); margin:0; line-height:1.05; }
 #contact .footer-board .actions,#contact .footer-board .social-links { margin:0; gap:12px; justify-content:center; }
