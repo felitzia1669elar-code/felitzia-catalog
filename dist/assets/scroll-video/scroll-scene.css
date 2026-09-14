@@ -99,3 +99,16 @@ section[id] { scroll-margin-top: 100px; }
 }
 
 #contact.footer-journey { overflow:visible; }
+
+/* Blend ivory content into the boutique, restoring its colors as we approach. */
+.footer-stage { --footer-softness:1; }
+.footer-first,.footer-film,.footer-still {
+ filter:saturate(calc(1 - var(--footer-softness)*.30)) brightness(calc(1 + var(--footer-softness)*.12));
+}
+.footer-stage::before,.footer-stage::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none; }
+.footer-stage::before { background:#fffdf8; opacity:calc(var(--footer-softness)*.14); }
+.footer-stage::after { bottom:auto; height:clamp(110px,20svh,190px); background:linear-gradient(to bottom,#fffdf8 0%,rgba(255,253,248,.82) 18%,rgba(255,253,248,.34) 55%,rgba(255,253,248,0) 100%); opacity:var(--footer-softness); }
+#contact .footer-board { z-index:2; }
+#blog { position:relative; }
+#blog::after { content:""; position:absolute; bottom:0; left:0; right:0; height:60px; background:linear-gradient(transparent,#fffdf8); pointer-events:none; }
+@media(prefers-reduced-motion:reduce) { .footer-stage { --footer-softness:0; } }

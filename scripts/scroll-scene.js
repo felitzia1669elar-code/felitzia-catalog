@@ -171,12 +171,15 @@ async function loadScrollVideo(video) {
   const left=Math.max(16,dx+280*scale),right=Math.min(w-16,dx+1064*scale);
   board.style.left=left+'px';board.style.width=(right-left)+'px';
   board.style.top=(dy+210*scale)+'px';board.style.height=(380*scale)+'px';
+  const p=clamp((navH-scene.getBoundingClientRect().top)/Math.max(1,scene.offsetHeight-stage.offsetHeight));
+  const colorProgress=clamp(p/.45);
+  const softness=(reduced.matches||failed)?0:1-colorProgress*colorProgress*(3-2*colorProgress);
+  stage.style.setProperty('--footer-softness',softness);
   if(!animated){
    const fallback=reduced.matches||failed;
    film.style.opacity=0;still.style.opacity=fallback?1:0;
    board.style.opacity=fallback?1:0;board.style.visibility=fallback?'visible':'hidden';board.inert=!fallback;return;
   }
-  const p=clamp((navH-scene.getBoundingClientRect().top)/Math.max(1,scene.offsetHeight-stage.offsetHeight));
   const t=clamp(p/.80);
   target=t*Math.max(0,film.duration-.045);seek();
   const finished=p>=.82&&film.currentTime>=film.duration-.15;
