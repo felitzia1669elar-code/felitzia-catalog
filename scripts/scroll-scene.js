@@ -1,3 +1,17 @@
+// A local Blob gives the browser a seekable resource even when the CDN ignores Range.
+async function loadScrollVideo(video) {
+  if (video.dataset.loading === 'true') return;
+  video.dataset.loading = 'true';
+  try {
+    const response = await fetch(video.dataset.src);
+    if (!response.ok) throw new Error('Video HTTP ' + response.status);
+    const blob = await response.blob();
+    video.src = URL.createObjectURL(blob);
+    video.load();
+  } catch (_) {
+    video.dispatchEvent(new Event('error'));
+  }
+}
 (() => {
   'use strict';
   const scene = document.querySelector('.scroll-scene');
@@ -128,12 +142,10 @@
   window.addEventListener('scroll', requestRender, { passive: true });
   window.addEventListener('resize', measure, { passive: true });
   new ResizeObserver(measure).observe(nav);
-  reduced.addEventListener('change', () => { fallback(); if (!reduced.matches) { transition.src = transition.dataset.src; transition.load(); film.src = film.dataset.src; film.load(); } });
+  reduced.addEventListener('change', () => { fallback(); if (!reduced.matches) { loadScrollVideo(transition); loadScrollVideo(film); } });
   if (!reduced.matches) {
-    transition.src = transition.dataset.src;
-    transition.load();
-    film.src = film.dataset.src;
-    film.load();
+    loadScrollVideo(transition);
+    loadScrollVideo(film);
   } else fallback();
 })();
 
@@ -174,7 +186,7 @@
  film.addEventListener('error',()=>{failed=true;queue();});
  window.addEventListener('scroll',queue,{passive:true});window.addEventListener('resize',queue,{passive:true});
  new ResizeObserver(queue).observe(nav);
- function load(){if(!reduced.matches&&!film.src){film.src=film.dataset.src;film.preload='auto';film.load();}}
+ function load(){if(!reduced.matches&&!film.src){loadScrollVideo(film);}}
  reduced.addEventListener('change',()=>{load();queue();});
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){load();observer.disconnect();}},{rootMargin:'1600px'});
  observer.observe(scene);queue();
