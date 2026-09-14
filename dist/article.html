@@ -199,8 +199,9 @@
       height: min(520px, 54vw);
       min-height: 260px;
       display: block;
-      object-fit: cover;
-      background: #fff;
+      object-fit: contain;
+      object-position: center;
+      background: rgba(255, 253, 248, .86);
     }
 
     .article-body {
@@ -233,6 +234,7 @@
       font-size: clamp(20px, 2.5vw, 25px);
       font-weight: 750;
       line-height: 1.35;
+      white-space: pre-line;
     }
 
     .article-content {
@@ -247,6 +249,7 @@
       font-size: clamp(18px, 2vw, 21px);
       font-weight: 600;
       line-height: 1.58;
+      white-space: pre-line;
     }
 
     .article-actions {
@@ -402,6 +405,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="assets/celestial-theme.css?v=20260907-2">
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">
@@ -439,6 +443,7 @@
       ? params.get("lang")
       : (supportedLanguages.includes(localStorage.getItem("felitziaLang")) ? localStorage.getItem("felitziaLang") : "ru");
     const articleId = params.get("id") || "";
+    let serverPosts = [];
 
     const ui = {
       ru: {
@@ -497,11 +502,23 @@
 
     function readClientPosts() {
       try {
-        const posts = JSON.parse(localStorage.getItem(storageKey) || "[]");
-        return Array.isArray(posts) ? posts : [];
+        return serverPosts;
       } catch {
         return [];
       }
+    }
+
+    async function loadServerPosts() {
+      try {
+        const response = await fetch("/api/posts", { cache: "no-store" });
+        if (!response.ok) throw new Error("posts api failed");
+        const data = await response.json();
+        serverPosts = Array.isArray(data.posts) ? data.posts : [];
+      } catch {
+        const posts = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        serverPosts = Array.isArray(posts) ? posts : [];
+      }
+      renderArticle();
     }
 
     function normalizePost(post) {
@@ -526,8 +543,7 @@
     function articleParagraphs(post) {
       const content = localize(post.content);
       if (Array.isArray(content) && content.length) return content;
-      const text = localize(post.text);
-      return String(text).split(/\n{2,}|\n/).map((line) => line.trim()).filter(Boolean);
+      return [];
     }
 
     function updateLanguageLinks() {
@@ -577,7 +593,7 @@
             ${articleParagraphs(post).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
           </div>
           <div class="article-actions">
-            <a class="button telegram" href="https://t.me/Inna1661" target="_blank" rel="noreferrer">${escapeHtml(ui[currentLang].writeTelegram)}</a>
+            <a class="button telegram" href="https://t.me/felitzia" target="_blank" rel="noreferrer">${escapeHtml(ui[currentLang].writeTelegram)}</a>
             <a class="button secondary" href="index.html?lang=${escapeHtml(currentLang)}#catalog">${escapeHtml(ui[currentLang].watchCatalog)}</a>
           </div>
         </div>
@@ -595,6 +611,7 @@
     });
 
     renderArticle();
+    loadServerPosts();
   </script>
 </body>
 </html>

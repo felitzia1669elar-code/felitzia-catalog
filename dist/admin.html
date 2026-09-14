@@ -97,6 +97,11 @@
       color: var(--sapphire);
     }
 
+    button:disabled {
+      opacity: .7;
+      cursor: wait;
+    }
+
     h1,
     h2 {
       margin: 0;
@@ -224,6 +229,7 @@
       font-size: 15px;
       font-weight: 650;
       line-height: 1.35;
+      white-space: pre-line;
     }
 
     .post-actions {
@@ -315,11 +321,11 @@
 
     <section id="admin-app" class="hidden">
       <h1>Кабинет Фелиции</h1>
-      <p class="lead">Добавление новостей и материалов в блог. Каждая запись публикуется во всех языковых версиях сайта без автоматического перевода и открывается как отдельная статья. Сейчас кабинет локальный: записи сохраняются в этом браузере и сразу видны на этой же машине.</p>
+      <p class="lead">Добавление новостей и материалов в блог. Каждая запись публикуется во всех языковых версиях сайта без автоматического перевода и открывается как отдельная статья.</p>
 
       <div class="layout">
-      <section class="panel">
-        <h2>Новая запись</h2>
+      <section class="panel post-editor" id="post-editor">
+        <h2 id="post-form-title">Новая запись</h2>
         <form id="post-form">
           <input type="hidden" id="post-id">
           <label>
@@ -347,12 +353,12 @@
             <input id="post-image-file" type="file" accept="image/*">
           </label>
           <div class="form-actions">
-            <button type="submit">Сохранить</button>
+            <button type="submit" id="save-post-button">Сохранить</button>
             <button class="secondary" type="button" id="reset-form">Очистить</button>
           </div>
           <div class="status" id="status"></div>
         </form>
-        <p class="note">Для настоящего кабинета с общим доступом и сохранением на сервере нужен следующий этап: подключить базу данных или CMS.</p>
+        <p class="note">Записи сохраняются на Cloudflare и видны всем посетителям сайта после сохранения.</p>
       </section>
 
       <section class="panel">
@@ -366,7 +372,9 @@
   <script>
     const passwordHash = "c0815050ab5352d75afa91bab57d6d72e46680ace2ad6d08a78ad58ccd3ec35f";
     const loginKey = "felitziaAdminAccess";
+    const passwordKey = "felitziaAdminPassword";
     const storageKey = "felitziaBlogPosts";
+    let postsCache = [];
     const loginPanel = document.getElementById("login-panel");
     const adminApp = document.getElementById("admin-app");
     const loginForm = document.getElementById("login-form");
@@ -375,7 +383,11 @@
     const form = document.getElementById("post-form");
     const statusNode = document.getElementById("status");
     const postList = document.getElementById("post-list");
+    const editorPanel = document.getElementById("post-editor");
+    const formTitle = document.getElementById("post-form-title");
+    const saveButton = document.getElementById("save-post-button");
     const dateInput = document.getElementById("post-date");
+    const titleInput = document.getElementById("post-title");
     const fileInput = document.getElementById("post-image-file");
 
     dateInput.valueAsDate = new Date();
@@ -385,11 +397,11 @@
       return Array.from(new Uint8Array(buffer)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
     }
 
-    function setAccess(isAllowed) {
+    async function setAccess(isAllowed) {
       loginPanel.classList.toggle("hidden", isAllowed);
       adminApp.classList.toggle("hidden", !isAllowed);
       logoutButton.classList.toggle("hidden", !isAllowed);
-      if (isAllowed) renderPosts();
+      if (isAllowed) await loadPosts();
     }
 
     loginForm.addEventListener("submit", async (event) => {
@@ -398,8 +410,9 @@
       const password = document.getElementById("admin-password").value;
       if (await sha256(password) === passwordHash) {
         sessionStorage.setItem(loginKey, "1");
+        sessionStorage.setItem(passwordKey, password);
         document.getElementById("admin-password").value = "";
-        setAccess(true);
+        await setAccess(true);
       } else {
         loginStatus.textContent = "Неверный пароль.";
       }
@@ -407,20 +420,59 @@
 
     logoutButton.addEventListener("click", () => {
       sessionStorage.removeItem(loginKey);
+      sessionStorage.removeItem(passwordKey);
       setAccess(false);
     });
 
-    function getPosts() {
+    async function loadPosts() {
       try {
-        const posts = JSON.parse(localStorage.getItem(storageKey) || "[]");
-        return Array.isArray(posts) ? posts : [];
+        postList.innerHTML = '<p class="note">Загружаю записи...</p>';
+        const response = await fetch("/api/posts", { cache: "no-store" });
+        if (!response.ok) throw new Error("posts api failed");
+        const data = await response.json();
+        postsCache = Array.isArray(data.posts) ? data.posts : [];
+        cachePosts(postsCache);
       } catch {
-        return [];
+        const posts = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        postsCache = Array.isArray(posts) ? posts : [];
+        message("Сервер временно недоступен. Показаны локальные записи.");
       }
+      renderPosts();
     }
 
-    function savePosts(posts) {
-      localStorage.setItem(storageKey, JSON.stringify(posts));
+    function getPosts() {
+      return postsCache;
+    }
+
+    async function savePost(post) {
+      const response = await fetch("/api/posts", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          password: sessionStorage.getItem(passwordKey) || "",
+          post
+        })
+      });
+      if (!response.ok) throw new Error("save failed");
+      const data = await response.json();
+      postsCache = Array.isArray(data.posts) ? data.posts : getPosts();
+      cachePosts(postsCache);
+      renderPosts();
+    }
+
+    async function deletePost(id) {
+      const response = await fetch("/api/posts", {
+        method: "DELETE",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          password: sessionStorage.getItem(passwordKey) || "",
+          id
+        })
+      });
+      if (!response.ok) throw new Error("delete failed");
+      const data = await response.json();
+      postsCache = Array.isArray(data.posts) ? data.posts : getPosts().filter((post) => post.id !== id);
+      cachePosts(postsCache);
       renderPosts();
     }
 
@@ -454,11 +506,29 @@
       return { ru: text, ro: text, en: text };
     }
 
+    function localizedText(value, fallback = "") {
+      if (typeof value === "string") return value;
+      return value?.ru || value?.ro || value?.en || fallback;
+    }
+
+    function setFormMode(isEditing) {
+      formTitle.textContent = isEditing ? "Редактирование записи" : "Новая запись";
+      saveButton.textContent = isEditing ? "Сохранить изменения" : "Сохранить";
+    }
+
+    function cachePosts(posts) {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(posts));
+      } catch {
+        localStorage.removeItem(storageKey);
+      }
+    }
+
     function clearForm() {
       form.reset();
       document.getElementById("post-id").value = "";
       dateInput.valueAsDate = new Date();
-      document.querySelector(".panel h2").textContent = "Новая запись";
+      setFormMode(false);
     }
 
     function renderPosts() {
@@ -496,6 +566,7 @@
         message("Заполни заголовок и описание.");
         return;
       }
+      message("Сохраняю запись...");
       const image = await readImage();
       const posts = getPosts();
       const post = {
@@ -510,9 +581,18 @@
       const index = posts.findIndex((entry) => entry.id === id);
       if (index >= 0) posts[index] = post;
       else posts.unshift(post);
-      savePosts(posts);
-      clearForm();
-      message("Запись сохранена.");
+      saveButton.disabled = true;
+      saveButton.textContent = "Сохраняю...";
+      try {
+        await savePost(post);
+        clearForm();
+        message("Запись сохранена на сайте.");
+      } catch {
+        message("Ошибка сохранения на сервере. Попробуй еще раз.");
+      } finally {
+        saveButton.disabled = false;
+        setFormMode(Boolean(document.getElementById("post-id").value));
+      }
     });
 
     document.getElementById("reset-form").addEventListener("click", () => {
@@ -521,23 +601,36 @@
     });
 
     postList.addEventListener("click", (event) => {
-      const editId = event.target.dataset.edit;
-      const deleteId = event.target.dataset.delete;
+      const editButton = event.target.closest("[data-edit]");
+      const deleteButton = event.target.closest("[data-delete]");
+      const editId = editButton?.dataset.edit;
+      const deleteId = deleteButton?.dataset.delete;
       const posts = getPosts();
       if (deleteId) {
-        savePosts(posts.filter((post) => post.id !== deleteId));
-        message("Запись удалена.");
+        deleteButton.disabled = true;
+        deleteButton.textContent = "Удаляю...";
+        message("Удаляю запись...");
+        deletePost(deleteId)
+          .then(() => message("Запись удалена."))
+          .catch(() => {
+            deleteButton.disabled = false;
+            deleteButton.textContent = "Удалить";
+            message("Ошибка удаления на сервере.");
+          });
+        return;
       }
       if (editId) {
         const post = posts.find((entry) => entry.id === editId);
         if (!post) return;
         document.getElementById("post-id").value = post.id;
         dateInput.value = post.date || "";
-        document.getElementById("post-category").value = post.category.ru || post.category.ro || post.category.en || "";
-        document.getElementById("post-title").value = post.title.ru || post.title.ro || post.title.en || "";
-        document.getElementById("post-text").value = post.text.ru || post.text.ro || post.text.en || "";
+        document.getElementById("post-category").value = localizedText(post.category);
+        titleInput.value = localizedText(post.title);
+        document.getElementById("post-text").value = localizedText(post.text);
         document.getElementById("post-image-url").value = post.image || "";
-        document.querySelector(".panel h2").textContent = "Редактирование";
+        setFormMode(true);
+        editorPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.setTimeout(() => titleInput.focus({ preventScroll: true }), 420);
         message("Запись открыта для редактирования.");
       }
     });

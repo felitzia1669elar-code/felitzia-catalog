@@ -1,5 +1,11 @@
 .DS_Store
 .playwright-cli/
-dist/
 site.tar.gz
 .wrangler/
+output/
+assets/social-cards-2026-09-06/facebook-posts/Новая папка с объектами/
+dist/assets/social-cards-2026-09-06/facebook-posts/Новая папка с объектами/
+.dev.vars
+.env
+.env.*
+!.env.example

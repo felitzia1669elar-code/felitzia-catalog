@@ -6,7 +6,7 @@ import { detailItemCopy, detailPageCopy, detailUi } from "./detail-i18n.mjs";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const outputDir = join(root, "details");
 
-const telegramUrl = "https://t.me/Inna1661";
+const telegramUrl = "https://t.me/felitzia";
 const socialLinks = {
   facebook: "https://www.facebook.com/inna.mazurok.252196",
   instagram:
@@ -1454,6 +1454,7 @@ function renderPage(page) {
       }
     }
   </style>
+  <link rel="stylesheet" href="../assets/celestial-theme.css?v=20260907-2">
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">

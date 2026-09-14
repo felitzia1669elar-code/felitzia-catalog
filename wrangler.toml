@@ -1,0 +1,7 @@
+name = "felitzia-catalog"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-07"
+
+[[kv_namespaces]]
+binding = "BLOG_POSTS"
+id = "bb6876aa9d724f1c84c90806520e4d43"

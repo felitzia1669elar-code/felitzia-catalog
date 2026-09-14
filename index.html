@@ -32,15 +32,17 @@
     }
 
     body {
+      --cosmos-tile-width: 900px;
+      --cosmos-tile-height: 1350px;
       margin: 0;
       padding-top: 78px;
-      background:
-        radial-gradient(circle at 2% 30%, rgba(142, 216, 248, .18), transparent 18%),
-        radial-gradient(circle at 96% 72%, rgba(169, 199, 161, .18), transparent 24%),
-        linear-gradient(180deg, #fffdf8 0%, #fbf5e8 46%, #eef8fb 100%);
+      position: relative;
+      isolation: isolate;
+      background: #fffdf8;
       color: var(--ink);
       font-family: Inter, Arial, sans-serif;
     }
+
 
     a {
       color: inherit;
@@ -164,10 +166,7 @@
       min-height: 760px;
       padding: 0 22px 58px;
       color: var(--ink);
-      background:
-        radial-gradient(circle at 12% 48%, rgba(142, 216, 248, .2), transparent 20%),
-        radial-gradient(circle at 84% 62%, rgba(243, 230, 200, .62), transparent 28%),
-        linear-gradient(180deg, #fffaf0 0%, #fff8e9 58%, #f0fbff 100%);
+      background: transparent;
       border-bottom: 1px solid rgba(201, 154, 62, .42);
     }
 
@@ -176,27 +175,22 @@
       position: absolute;
       inset: 0 0 auto;
       height: 132px;
-      background: linear-gradient(110deg, #071421 0%, #10375d 56%, #143f6a 100%);
+      background: linear-gradient(110deg, rgba(7, 20, 33, .94) 0%, rgba(16, 55, 93, .94) 56%, rgba(20, 63, 106, .94) 100%);
       border-bottom: 4px solid rgba(201, 154, 62, .8);
       box-shadow: 0 18px 45px rgba(8, 19, 31, .08);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: min(7vw, 86px);
-      top: 165px;
-      width: 300px;
-      height: 96px;
-      border-top: 5px solid rgba(169, 199, 161, .34);
-      border-radius: 50%;
-      transform: rotate(7deg);
     }
 
     .hero-inner,
     .section-inner {
       width: min(1120px, 100%);
       margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-copy,
+    .section-title {
+      text-shadow: 0 1px 6px #fffdf8, 0 0 18px #fffdf8;
     }
 
     .topbar {
@@ -308,6 +302,8 @@
     .hero-portrait {
       position: relative;
       z-index: 2;
+      overflow: hidden;
+      isolation: isolate;
       width: min(1040px, 100%);
       margin: 0 auto 42px;
       padding: 10px;
@@ -318,6 +314,8 @@
     }
 
     .hero-portrait img {
+      position: relative;
+      z-index: 1;
       display: block;
       width: 100%;
       height: auto;
@@ -435,7 +433,7 @@
     .image-card {
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: rgba(255, 253, 248, .78);
+      background: rgba(255, 253, 248, .94);
       box-shadow: 0 18px 42px rgba(8, 19, 31, .08);
     }
 
@@ -481,6 +479,44 @@
       font-size: 18px;
       font-weight: 650;
       line-height: 1.36;
+      max-height: 9.6em;
+      overflow: hidden;
+      white-space: pre-line;
+    }
+
+    .package-price-summary {
+      min-height: 72px;
+      margin-top: 4px;
+      padding: 12px 18px;
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 253, 248, .78);
+      color: var(--muted);
+    }
+
+    .package-price-mark {
+      width: 46px;
+      height: 46px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid rgba(201, 154, 62, .32);
+      border-radius: 50%;
+      background: rgba(255, 253, 248, .76);
+      color: var(--gold);
+      font-size: 20px;
+      font-weight: 850;
+    }
+
+    .package-price-summary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1.22;
     }
 
     .chips {
@@ -587,6 +623,10 @@
       display: none;
     }
 
+    .blog-extra[hidden] {
+      display: none;
+    }
+
     .visual-toggle-wrap {
       display: flex;
       justify-content: center;
@@ -641,8 +681,10 @@
     .blog-card img {
       width: 100%;
       height: 230px;
-      object-fit: cover;
-      background: #fff;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+      background: rgba(255, 253, 248, .82);
     }
 
     .blog-body {
@@ -669,7 +711,13 @@
     .blog-read {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      min-height: 42px;
       margin-top: 18px;
+      padding: 10px 16px;
+      border: 2px solid var(--gold);
+      border-radius: 999px;
+      background: rgba(255, 253, 248, .92);
       color: var(--sapphire);
       font-size: 14px;
       font-weight: 950;
@@ -685,9 +733,16 @@
     }
 
     .final {
+      position: relative;
+      overflow: hidden;
       padding-bottom: 96px;
-      background: linear-gradient(125deg, var(--navy), var(--sapphire));
+      background: linear-gradient(125deg, rgba(8, 19, 31, .94), rgba(18, 58, 99, .94));
       color: white;
+    }
+
+    .final .section-inner {
+      position: relative;
+      z-index: 2;
     }
 
     .final h2 {
@@ -813,11 +868,14 @@
       .gallery {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
+
     }
 
     @media (max-width: 680px) {
       body {
         padding-top: 118px;
+        --cosmos-tile-width: 560px;
+        --cosmos-tile-height: 840px;
       }
 
       .site-nav {
@@ -925,6 +983,25 @@
         grid-template-columns: 1fr;
       }
 
+      .offer {
+        padding: 26px 14px;
+      }
+
+      .package-price-summary {
+        min-height: 0;
+        padding: 12px 14px;
+        display: block;
+      }
+
+      .package-price-mark {
+        display: none;
+      }
+
+      .package-price-summary p {
+        font-size: 17px;
+        line-height: 1.2;
+      }
+
       .section-title {
         display: block;
       }
@@ -941,10 +1018,16 @@
         width: 50px;
         height: 50px;
       }
+
+      .final {
+        padding-bottom: 110px;
+      }
     }
   </style>
+  <link rel="stylesheet" href="assets/celestial-theme.css?v=20260907-2">
 </head>
 <body id="top">
+
   <nav class="site-nav" aria-label="Навигация сайта">
     <div class="nav-inner">
       <a class="nav-brand" href="#top"><span data-i18n="brandName">Фелиция</span><small>14 / 41</small></a>
@@ -971,14 +1054,14 @@
         </div>
       <div class="logo-mark"><img src="assets/elar-logo-reference.png" alt=""></div>
       <figure class="hero-portrait">
-        <img src="assets/felitzia-portrait.png" alt="Фелиция">
+        <img src="assets/felitzia-portrait.png?v=20260907-1308" alt="Фелиция">
       </figure>
       <div class="hero-copy">
         <p class="eyebrow" data-i18n="heroEyebrow">Каталог консультаций</p>
         <h1 data-i18n="heroTitle">12 сфер для разбора жизненного пути</h1>
         <p class="hero-text" data-i18n="heroText">Нумерология, Таро, астрология, руны, родовые программы, совместимость, бизнес-направления и авторские практики в одном понятном каталоге.</p>
         <div class="hero-actions">
-          <a class="button" href="https://t.me/Inna1661" target="_blank" rel="noreferrer" data-i18n="writeTelegram">Написать в Telegram</a>
+          <a class="button" href="https://t.me/felitzia" target="_blank" rel="noreferrer" data-i18n="writeTelegram">Написать в Telegram</a>
           <a class="button secondary" href="#catalog" data-i18n="watchCatalog">Смотреть каталог</a>
         </div>
       </div>
@@ -1001,7 +1084,10 @@
         <div class="offer">
           <div class="offer-price">€200</div>
           <h3 data-i18n="packageName">4 главных раздела</h3>
-          <p data-i18n="packageEconomy">Отдельно эти разделы стоят €250. Цена пакета: €200. Экономия: €50.</p>
+          <div class="package-price-summary" aria-label="Цена пакета">
+            <span class="package-price-mark">€</span>
+            <p data-i18n="packagePriceSummary">Каждый раздел отдельно — €50.<br>Если брать по отдельности: €250.<br>Цена пакета: €200. Экономия: €50.</p>
+          </div>
           <div class="chips">
             <span class="chip" data-i18n="programDestiny">Программа судьбы</span>
             <span class="chip" data-i18n="karmaLabyrinth">Лабиринт Кармы</span>
@@ -1057,6 +1143,12 @@
         <p data-i18n="blogLead">Новости, заметки и материалы каталога.</p>
       </div>
       <div class="blog-grid" id="blog-list"></div>
+      <div class="visual-more">
+        <div class="blog-grid blog-extra" id="blog-extra" hidden></div>
+        <div class="visual-toggle-wrap">
+          <button class="button secondary" type="button" id="blog-toggle" data-i18n="showBlogMaterials">Показать все материалы</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1064,7 +1156,7 @@
     <div class="section-inner">
       <h2 data-i18n="contactTitle">Запись</h2>
       <div class="actions">
-        <a class="button" href="https://t.me/Inna1661" target="_blank" rel="noreferrer" data-i18n="writeTelegram">Написать в Telegram</a>
+        <a class="button" href="https://t.me/felitzia" target="_blank" rel="noreferrer" data-i18n="writeTelegram">Написать в Telegram</a>
         <a class="button secondary" href="#package" data-i18n="watchPackage">Посмотреть пакет</a>
       </div>
       <nav class="social-links" aria-label="Социальные сети">
@@ -1103,7 +1195,7 @@
         packageTitle: "Пакет",
         packageLead: "В пакет входят 4 больших разбора. Пятый раздел клиент получает бонусом.",
         packageName: "4 главных раздела",
-        packageEconomy: "Отдельно эти разделы стоят €250. Цена пакета: €200. Экономия: €50.",
+        packagePriceSummary: "Каждый раздел отдельно — €50.<br>Если брать по отдельности: €250.<br>Цена пакета: €200. Экономия: €50.",
         programDestiny: "Программа судьбы",
         karmaLabyrinth: "Лабиринт Кармы",
         health: "Здоровье",
@@ -1121,11 +1213,13 @@
         visualsLead: "Схемы, графики, мандалы и отдельные визуальные материалы из каталога.",
         showVisuals: "Показать все материалы",
         hideVisuals: "Скрыть материалы",
+        showBlogMaterials: "Показать все материалы",
+        hideBlogMaterials: "Скрыть материалы",
         blogTitle: "Блог",
         blogLead: "Новости, заметки и материалы каталога.",
         contactTitle: "Запись",
         watchPackage: "Посмотреть пакет",
-        readArticle: "Открыть статью"
+        readArticle: "Открыть статью полностью"
       },
       ro: {
         brandName: "Felitzia",
@@ -1149,7 +1243,7 @@
         packageTitle: "Pachet",
         packageLead: "Pachetul include 4 analize mari. A cincea sectiune este oferita ca bonus.",
         packageName: "4 sectiuni principale",
-        packageEconomy: "Separat aceste sectiuni costa €250. Pretul pachetului: €200. Economie: €50.",
+        packagePriceSummary: "Fiecare sectiune separat — €50.<br>Daca sunt luate separat: €250.<br>Pretul pachetului: €200. Economie: €50.",
         programDestiny: "Programul destinului",
         karmaLabyrinth: "Labirintul karmei",
         health: "Sanatate",
@@ -1167,11 +1261,13 @@
         visualsLead: "Scheme, grafice, mandale si materiale vizuale separate din catalog.",
         showVisuals: "Arata toate materialele",
         hideVisuals: "Ascunde materialele",
+        showBlogMaterials: "Arata toate materialele",
+        hideBlogMaterials: "Ascunde materialele",
         blogTitle: "Blog",
         blogLead: "Noutati, note si materiale din catalog.",
         contactTitle: "Programare",
         watchPackage: "Vezi pachetul",
-        readArticle: "Deschide articolul"
+        readArticle: "Deschide articolul complet"
       },
       en: {
         brandName: "Felitzia",
@@ -1195,7 +1291,7 @@
         packageTitle: "Package",
         packageLead: "The package includes 4 large readings. The fifth section is included as a bonus.",
         packageName: "4 main sections",
-        packageEconomy: "Separately these sections cost €250. Package price: €200. Savings: €50.",
+        packagePriceSummary: "Each section separately — €50.<br>Taken separately: €250.<br>Package price: €200. Savings: €50.",
         programDestiny: "Destiny program",
         karmaLabyrinth: "Karma Labyrinth",
         health: "Health",
@@ -1213,11 +1309,13 @@
         visualsLead: "Schemes, charts, mandalas and separate visual materials from the catalog.",
         showVisuals: "Show all materials",
         hideVisuals: "Hide materials",
+        showBlogMaterials: "Show all materials",
+        hideBlogMaterials: "Hide materials",
         blogTitle: "Blog",
         blogLead: "News, notes and catalog materials.",
         contactTitle: "Booking",
         watchPackage: "View package",
-        readArticle: "Open article"
+        readArticle: "Open full article"
       }
     };
 
@@ -1436,6 +1534,7 @@
     const storageKey = "felitziaBlogPosts";
     const requestedLang = new URLSearchParams(window.location.search).get("lang");
     let currentLang = translations[requestedLang] ? requestedLang : (localStorage.getItem("felitziaLang") || "ru");
+    let serverPosts = [];
 
     function localize(value) {
       if (typeof value === "string") return value;
@@ -1489,6 +1588,7 @@
     }
 
     let visualsExpanded = false;
+    let blogExpanded = false;
 
     function renderImageCards(items) {
       return items.map((item) => `
@@ -1512,11 +1612,23 @@
 
     function readClientPosts() {
       try {
-        const posts = JSON.parse(localStorage.getItem(storageKey) || "[]");
-        return Array.isArray(posts) ? posts : [];
+        return serverPosts;
       } catch {
         return [];
       }
+    }
+
+    async function loadServerPosts() {
+      try {
+        const response = await fetch("/api/posts", { cache: "no-store" });
+        if (!response.ok) throw new Error("posts api failed");
+        const data = await response.json();
+        serverPosts = Array.isArray(data.posts) ? data.posts : [];
+      } catch {
+        const posts = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        serverPosts = Array.isArray(posts) ? posts : [];
+      }
+      renderBlog();
     }
 
     function normalizePost(post) {
@@ -1536,23 +1648,47 @@
       return `article.html?lang=${encodeURIComponent(currentLang)}&id=${encodeURIComponent(post.id)}`;
     }
 
-    function renderBlog() {
-      const blog = document.getElementById("blog-list");
-      const clientPosts = readClientPosts()
-        .map(normalizePost)
-        .filter((post) => post.lang === "all" || post.lang === currentLang);
-      const posts = [...clientPosts, ...defaultPosts];
-      blog.innerHTML = posts.map((post) => `
+    function blogPreviewText(post) {
+      const text = localize(post.text).replace(/\r\n/g, "\n").trim();
+      if (!text) return "";
+      const chunks = text.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+      const maxChunks = 4;
+      const maxLength = 260;
+      let preview = chunks.slice(0, maxChunks).join("\n\n");
+      const isShortened = chunks.length > maxChunks || preview.length > maxLength || preview.length < text.length;
+      if (preview.length > maxLength) preview = preview.slice(0, maxLength).trim();
+      return isShortened ? `${preview}...` : preview;
+    }
+
+    function renderBlogCards(posts) {
+      return posts.map((post) => `
         <a class="blog-card" href="${escapeHtml(articleHref(post))}">
           <img src="${escapeHtml(post.image)}" alt="${escapeHtml(localize(post.title))}">
           <div class="blog-body">
             <div class="blog-meta"><span>${escapeHtml(post.date)}</span><span>${escapeHtml(localize(post.category))}</span></div>
             <h3>${escapeHtml(localize(post.title))}</h3>
-            <p>${escapeHtml(localize(post.text))}</p>
+            <p>${escapeHtml(blogPreviewText(post))}</p>
             <span class="blog-read">${escapeHtml(translations[currentLang].readArticle)}</span>
           </div>
         </a>
       `).join("");
+    }
+
+    function renderBlog() {
+      const blog = document.getElementById("blog-list");
+      const extra = document.getElementById("blog-extra");
+      const toggle = document.getElementById("blog-toggle");
+      const clientPosts = readClientPosts()
+        .map(normalizePost)
+        .filter((post) => post.lang === "all" || post.lang === currentLang);
+      const posts = [...clientPosts, ...defaultPosts];
+      const visiblePosts = posts.slice(0, 3);
+      const hiddenPosts = posts.slice(3);
+      blog.innerHTML = renderBlogCards(visiblePosts);
+      extra.innerHTML = renderBlogCards(hiddenPosts);
+      extra.hidden = !blogExpanded || hiddenPosts.length === 0;
+      toggle.hidden = hiddenPosts.length === 0;
+      toggle.textContent = blogExpanded ? translations[currentLang].hideBlogMaterials : translations[currentLang].showBlogMaterials;
     }
 
     document.querySelectorAll(".lang-button").forEach((button) => {
@@ -1564,7 +1700,13 @@
       renderVisuals();
     });
 
+    document.getElementById("blog-toggle").addEventListener("click", () => {
+      blogExpanded = !blogExpanded;
+      renderBlog();
+    });
+
     setLanguage(currentLang);
+    loadServerPosts();
   </script>
 </body>
 </html>

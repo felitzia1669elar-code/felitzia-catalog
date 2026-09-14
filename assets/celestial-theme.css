@@ -1,0 +1,111 @@
+body {
+  --cosmos-tile-width: 900px;
+  --cosmos-tile-height: 1350px;
+  --cosmos-pattern-position: center 70px;
+  --cosmos-ink: .46;
+  position: relative;
+  isolation: isolate;
+  background: #fffdf8;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: var(--cosmos-ink);
+  mix-blend-mode: multiply;
+  background: url("celestial-drawn-background-v4.png") var(--cosmos-pattern-position) /
+    var(--cosmos-tile-width) var(--cosmos-tile-height) repeat;
+  /* Matching masks keep every repetition clear of cut-off illustrations. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-size: var(--cosmos-tile-width) var(--cosmos-tile-height);
+  mask-size: var(--cosmos-tile-width) var(--cosmos-tile-height);
+  -webkit-mask-position: var(--cosmos-pattern-position);
+  mask-position: var(--cosmos-pattern-position);
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+:is(.stat, .offer, .panel, .service-card, .blog-card, .image-card,
+    .section-visual, .list-panel, .items > li, .article-card) {
+  --cosmos-tile-width: 480px;
+  --cosmos-tile-height: 720px;
+  --cosmos-pattern-position: center -135px;
+  --cosmos-veil: .82;
+  background-color: #fffdf8;
+  background-image:
+    linear-gradient(rgba(255, 253, 248, var(--cosmos-veil)), rgba(255, 253, 248, var(--cosmos-veil))),
+    url("celestial-drawn-background-v4.png");
+  background-size: auto, var(--cosmos-tile-width) var(--cosmos-tile-height);
+  background-position: 0 0, var(--cosmos-pattern-position);
+  background-repeat: repeat;
+}
+
+:is(.stat, .service-card, .blog-card, .image-card, .items > li):nth-child(3n + 2) {
+  --cosmos-pattern-position: center -320px;
+}
+
+:is(.stat, .service-card, .blog-card, .image-card, .items > li):nth-child(3n) {
+  --cosmos-pattern-position: center -480px;
+}
+
+.list-panel {
+  --cosmos-veil: .92;
+}
+
+.article-card {
+  --cosmos-tile-width: 760px;
+  --cosmos-tile-height: 1140px;
+  --cosmos-pattern-position: center top;
+  --cosmos-veil: .84;
+}
+
+.top {
+  background: linear-gradient(110deg, rgba(7, 20, 33, .94), rgba(20, 63, 106, .94));
+}
+
+.top .topbar {
+  align-items: start;
+  padding-top: 26px;
+  padding-bottom: 82px;
+}
+
+.final {
+  background: linear-gradient(125deg, rgba(8, 19, 31, .94), rgba(18, 58, 99, .94));
+}
+
+.top + main::before,
+.top + main::after {
+  content: none;
+}
+
+.detail-hero .copy {
+  text-shadow: 0 1px 6px #fffdf8, 0 0 18px #fffdf8;
+}
+
+.article-body h1 {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+@media (max-width: 680px) {
+  body {
+    --cosmos-tile-width: 560px;
+    --cosmos-tile-height: 840px;
+  }
+
+  .article-body h1 {
+    font-size: 28px;
+    line-height: 1.12;
+  }
+}
