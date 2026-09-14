@@ -1025,6 +1025,7 @@
     }
   </style>
   <link rel="stylesheet" href="assets/celestial-theme.css?v=20260907-2">
+  <link rel="stylesheet" href="assets/scroll-video/scroll-scene.css">
 </head>
 <body id="top">
 
@@ -1052,124 +1053,143 @@
           <div class="hero-quote" data-i18n="heroQuote">Бог есть Математика!<br>Цифры, числа, значения.<br>Всё развитие Космоса -<br>По спирали движение!</div>
           <div class="meta" data-i18n="heroMeta">Нумерология<br>Таро<br>Астрология<br>Руны</div>
         </div>
-
-        <div class="hero-portrait">
-          <img src="assets/home-main-visual.png" alt="Фелиция">
+      <div class="logo-mark"><img src="assets/elar-logo-reference.png" alt=""></div>
+    </div>
+    <div class="scroll-scene" id="journey" aria-label="Путешествие в мир Фелиции">
+      <div class="scroll-stage">
+        <div class="scroll-picture">
+        <video class="scroll-film" muted playsinline preload="auto" disablepictureinpicture
+          poster="assets/felitzia-portrait.png" data-src="assets/scroll-video/felitzia-scroll-8s.mp4"
+          aria-label="Портрет Фелиции и путешествие к планете"></video>
         </div>
+        <div class="scroll-shade" aria-hidden="true"></div>
+        <div class="scroll-intro"><p data-i18n="journeyLabel">Фелиция · Числа и смыслы</p><strong data-i18n="journeyTitle">У каждого пути — своя вселенная.</strong></div>
+        <video class="journey-transition-film" muted playsinline preload="auto" disablepictureinpicture
+          poster="assets/scroll-video/felitzia-earth-final-frame.jpg" data-src="assets/scroll-video/felitzia-star-kling-v2.mp4"
+          aria-label="Золотая звезда и переход к каталогу"></video>
+        <div class="scroll-exit" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="heroEyebrow">Каталог консультаций</p>
+        <h1 data-i18n="heroTitle">12 сфер для разбора жизненного пути</h1>
+        <p class="hero-text" data-i18n="heroText">Нумерология, Таро, астрология, руны, родовые программы, совместимость, бизнес-направления и авторские практики в одном понятном каталоге.</p>
+        <div class="hero-actions">
+          <a class="button" href="https://t.me/felitzia" target="_blank" rel="noreferrer" data-i18n="writeTelegram">Написать в Telegram</a>
+          <a class="button secondary" href="#catalog" data-i18n="watchCatalog">Смотреть каталог</a>
+        </div>
+      </div>
 
-        <div class="hero-copy">
-          <div class="eyebrow" data-i18n="heroEyebrow">Каталог консультаций</div>
-          <h1 data-i18n="heroTitle">12 сфер для разбора жизненного пути</h1>
-          <p class="hero-text" data-i18n="heroText">Нумерология, Таро, астрология, руны, родовые программы, совместимость, бизнес-направления и авторские практики в одном понятном каталоге.</p>
-          <div class="hero-actions">
-            <a class="button" href="https://t.me/felitzia" target="_blank" rel="noreferrer" data-i18n="telegramButton">Написать в Telegram</a>
-            <a class="button secondary" href="#catalog" data-i18n="catalogButton">Смотреть каталог</a>
+        <div class="scroll-controls"><span data-i18n="journeyScroll">Листайте, чтобы войти ↓</span><a href="#package" data-i18n="journeySkip">К консультациям ↗</a></div>
+        <div class="scroll-progress" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-cards">
+        <div class="stat"><strong>12</strong><span data-i18n="statAreas">сфер консультаций</span></div>
+        <div class="stat"><strong>€200</strong><span data-i18n="statPackage">пакет 4 главных раздела</span></div>
+        <div class="stat"><strong>1,5-2</strong><span data-i18n="statHours">часа формат консультации</span></div>
+        <div class="stat"><strong>5-15</strong><span data-i18n="statPages">страниц материала</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="package">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2 data-i18n="packageTitle">Пакет</h2>
+        <p data-i18n="packageLead">В пакет входят 4 больших разбора. Пятый раздел клиент получает бонусом.</p>
+      </div>
+      <div class="package">
+        <div class="offer">
+          <div class="offer-price">€200</div>
+          <h3 data-i18n="packageName">4 главных раздела</h3>
+          <div class="package-price-summary" aria-label="Цена пакета">
+            <span class="package-price-mark">€</span>
+            <p data-i18n="packagePriceSummary">Каждый раздел отдельно — €50.<br>Если брать по отдельности: €250.<br>Цена пакета: €200. Экономия: €50.</p>
           </div>
+          <div class="chips">
+            <span class="chip" data-i18n="programDestiny">Программа судьбы</span>
+            <span class="chip" data-i18n="karmaLabyrinth">Лабиринт Кармы</span>
+            <span class="chip" data-i18n="health">Здоровье</span>
+            <span class="chip" data-i18n="compatibility">Совместимость</span>
+            <span class="chip" data-i18n="bonusAstrology">Бонус: Астрология</span>
+          </div>
+          <a class="button secondary detail-link" href="details/paket.html?lang=ru" data-detail-base="details/paket.html" data-i18n="learnMore">Узнать подробнее</a>
         </div>
-        <div class="hero-cards">
-          <div class="stat"><strong>12</strong><span data-i18n="stat1">сфер консультаций</span></div>
-          <div class="stat"><strong>€200</strong><span data-i18n="stat2">пакет 4 главных раздела</span></div>
-          <div class="stat"><strong>1,5-2</strong><span data-i18n="stat3">часа формат консультации</span></div>
-          <div class="stat"><strong>5-15</strong><span data-i18n="stat4">страниц материала</span></div>
-        </div>
-      </div>
-    </header>
-
-  <main>
-    <section id="package">
-      <div class="section-inner">
-        <div class="section-title">
-          <h2 data-i18n="packageTitle">Пакет</h2>
-          <p data-i18n="packageLead">В пакет входят 4 больших разбора. Пятый раздел клиент получает бонусом.</p>
-        </div>
-        <div class="package">
-          <article class="offer">
-            <div class="offer-price">€200</div>
-            <h3 data-i18n="packageHeading">4 главных раздела</h3>
-            <div class="package-price-summary" aria-label="Цена пакета">
-              <span class="package-price-mark">€</span>
-              <p data-i18n="packagePriceText">Каждый раздел отдельно — €50.<br>Если брать по отдельности: €250.<br>Цена пакета: €200. Экономия: €50.</p>
-            </div>
-            <div class="chips" aria-label="Разделы пакета">
-              <span class="chip" data-i18n="chipDestiny">Программа судьбы</span>
-              <span class="chip" data-i18n="chipKarma">Лабиринт Кармы</span>
-              <span class="chip" data-i18n="chipHealth">Здоровье</span>
-              <span class="chip" data-i18n="chipCompatibility">Совместимость</span>
-              <span class="chip" data-i18n="chipAstrology">Бонус: Астрология</span>
-            </div>
-            <a class="button secondary detail-link" href="details/paket.html?lang=ru" data-detail-base="details/paket.html" data-i18n="learnMore">Узнать подробнее</a>
-          </article>
-          <aside class="panel">
-            <ul>
-              <li data-i18n="packageList1">1,5-2 часа</li>
-              <li data-i18n="packageList2">Материал 5-15 страниц</li>
-              <li data-i18n="packageList3">Аудио / видео</li>
-              <li data-i18n="packageList4">Поддержка 30 дней</li>
-              <li data-i18n="packageList5">Запись через сообщение</li>
-            </ul>
-          </aside>
+        <div class="panel">
+          <ul>
+            <li data-i18n="formatHours">1,5-2 часа</li>
+            <li data-i18n="formatPages">Материал 5-15 страниц</li>
+            <li data-i18n="formatAudio">Аудио / видео</li>
+            <li data-i18n="supportDays">Поддержка 30 дней</li>
+            <li data-i18n="messageBooking">Запись через сообщение</li>
+          </ul>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="catalog">
-      <div class="section-inner">
-        <div class="section-title">
-          <h2 data-i18n="catalogTitle">Разделы</h2>
-          <p data-i18n="catalogLead">Короткая структура услуг и цен. Подробный состав каждого раздела можно уточнить при записи.</p>
-        </div>
-        <div class="grid" id="catalog-grid"></div>
+  <section id="catalog">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2 data-i18n="catalogTitle">Разделы</h2>
+        <p data-i18n="catalogLead">Короткая структура услуг и цен. Подробный состав каждого раздела можно уточнить при записи.</p>
       </div>
-    </section>
+      <div class="grid" id="catalog-grid"></div>
+    </div>
+  </section>
 
-    <section id="visuals">
-      <div class="section-inner">
-        <div class="section-title">
-          <h2 data-i18n="visualsTitle">Визуальные материалы</h2>
-          <p data-i18n="visualsLead">Схемы, графики, мандалы и отдельные визуальные материалы из каталога.</p>
-        </div>
-        <div class="gallery" id="visual-gallery"></div>
-        <div class="visual-more">
-          <div class="gallery visual-extra" id="visual-extra" hidden></div>
-        </div>
+  <section id="visuals">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2 data-i18n="visualsTitle">Визуальные материалы</h2>
+        <p data-i18n="visualsLead">Схемы, графики, мандалы и отдельные визуальные материалы из каталога.</p>
+      </div>
+      <div class="gallery" id="visual-gallery"></div>
+      <div class="visual-more">
+        <div class="gallery visual-extra" id="visual-extra" hidden></div>
         <div class="visual-toggle-wrap">
           <button class="button secondary" type="button" id="visual-toggle" data-i18n="showVisuals">Показать все материалы</button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="blog">
-      <div class="section-inner">
-        <div class="section-title">
-          <h2 data-i18n="blogTitle">Блог</h2>
-          <p data-i18n="blogLead">Новости, заметки и материалы каталога.</p>
-        </div>
+  <section id="blog">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2 data-i18n="blogTitle">Блог</h2>
+        <p data-i18n="blogLead">Новости, заметки и материалы каталога.</p>
+      </div>
       <div class="blog-grid" id="blog-list"></div>
-        <div class="visual-more">
-          <div class="blog-grid blog-extra" id="blog-extra" hidden></div>
-        </div>
+      <div class="visual-more">
+        <div class="blog-grid blog-extra" id="blog-extra" hidden></div>
         <div class="visual-toggle-wrap">
           <button class="button secondary" type="button" id="blog-toggle" data-i18n="showBlogMaterials">Показать все материалы</button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="final" id="contact">
-      <div class="section-inner">
-        <h2 data-i18n="contactTitle">Запись</h2>
-        <p data-i18n="contactText">Для записи напишите Фелиции в Telegram или WhatsApp. Укажите интересующий раздел и коротко опишите запрос.</p>
-        <div class="actions">
-          <a class="button" href="https://t.me/felitzia" target="_blank" rel="noreferrer" data-i18n="telegramButton">Написать в Telegram</a>
-          <a class="button secondary" href="#package" data-i18n="packageButton">Посмотреть пакет</a>
-        </div>
-        <div class="social-links" aria-label="Социальные сети">
-          <a class="social-link facebook" href="https://www.facebook.com/inna.mazurok.252196" target="_blank" rel="noreferrer"><span class="social-icon">F</span><span>Facebook</span></a>
-          <a class="social-link instagram" href="https://www.instagram.com/felitzia1669?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer"><span class="social-icon">IG</span><span>Instagram</span></a>
-          <a class="social-link youtube" href="https://www.youtube.com/@felizia1669" target="_blank" rel="noreferrer"><span class="social-icon">YT</span><span>YouTube</span></a>
-        </div>
+  <section id="contact" class="final footer-journey">
+    <div class="footer-stage">
+      <video class="footer-film" muted playsinline preload="none" disablepictureinpicture
+        data-src="assets/scroll-video/felitzia-footer-minimax-5s.mp4" aria-hidden="true"></video>
+      <img class="footer-still" src="assets/scroll-video/footer-final-actual.jpg" alt="" />
+      <div class="footer-white" aria-hidden="true"></div>
+    <div class="section-inner footer-board">
+      <h2 data-i18n="contactTitle">Запись</h2>
+      <div class="actions">
+        <a class="button" href="https://t.me/felitzia" target="_blank" rel="noreferrer" data-i18n="writeTelegram">Написать в Telegram</a>
+        <a class="button secondary" href="#package" data-i18n="watchPackage">Посмотреть пакет</a>
       </div>
-    </section>
-  </main>
+      <nav class="social-links" aria-label="Социальные сети">
+        <a class="social-link facebook" href="https://www.facebook.com/inna.mazurok.252196" target="_blank" rel="noreferrer"><span class="social-icon">F</span><span>Facebook</span></a>
+        <a class="social-link instagram" href="https://www.instagram.com/felitzia1669?utm_source=ig_web_button_share_sheet&amp;igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer"><span class="social-icon">IG</span><span>Instagram</span></a>
+        <a class="social-link youtube" href="https://www.youtube.com/@felizia1669" target="_blank" rel="noreferrer"><span class="social-icon">YT</span><span>YouTube</span></a>
+      </nav>
+    </div>
+    </div>
+  </section>
 
   <a class="float-button whatsapp-float" href="https://wa.me/37377808128" target="_blank" rel="noreferrer" aria-label="WhatsApp">WA</a>
   <a class="float-button to-top" href="#top" aria-label="Наверх">↑</a>
@@ -1178,8 +1198,12 @@
   <script>
     const translations = {
       ru: {
-        pageTitle: "Фелиция - каталог консультаций",
+        journeyLabel: "Фелиция · Числа и смыслы",
+        journeyTitle: "У каждого пути — своя вселенная.",
+        journeyScroll: "Листайте, чтобы войти ↓",
+        journeySkip: "К консультациям ↗",
         brandName: "Фелиция",
+        pageTitle: "Фелиция - каталог консультаций",
         navPackage: "Пакет",
         navCatalog: "Каталог",
         navVisuals: "Визуальные материалы",
@@ -1190,27 +1214,27 @@
         heroEyebrow: "Каталог консультаций",
         heroTitle: "12 сфер для разбора жизненного пути",
         heroText: "Нумерология, Таро, астрология, руны, родовые программы, совместимость, бизнес-направления и авторские практики в одном понятном каталоге.",
-        telegramButton: "Написать в Telegram",
-        catalogButton: "Смотреть каталог",
-        packageButton: "Посмотреть пакет",
-        stat1: "сфер консультаций",
-        stat2: "пакет 4 главных раздела",
-        stat3: "часа формат консультации",
-        stat4: "страниц материала",
+        writeTelegram: "Написать в Telegram",
+        watchCatalog: "Смотреть каталог",
+        statAreas: "сфер консультаций",
+        statPackage: "пакет 4 главных раздела",
+        statHours: "часа формат консультации",
+        statPages: "страниц материала",
         packageTitle: "Пакет",
         packageLead: "В пакет входят 4 больших разбора. Пятый раздел клиент получает бонусом.",
-        packageHeading: "4 главных раздела",
-        packagePriceText: "Каждый раздел отдельно — €50.<br>Если брать по отдельности: €250.<br>Цена пакета: €200. Экономия: €50.",
-        chipDestiny: "Программа судьбы",
-        chipKarma: "Лабиринт Кармы",
-        chipHealth: "Здоровье",
-        chipCompatibility: "Совместимость",
-        chipAstrology: "Бонус: Астрология",
-        packageList1: "1,5-2 часа",
-        packageList2: "Материал 5-15 страниц",
-        packageList3: "Аудио / видео",
-        packageList4: "Поддержка 30 дней",
-        packageList5: "Запись через сообщение",
+        packageName: "4 главных раздела",
+        packagePriceSummary: "Каждый раздел отдельно — €50.<br>Если брать по отдельности: €250.<br>Цена пакета: €200. Экономия: €50.",
+        programDestiny: "Программа судьбы",
+        karmaLabyrinth: "Лабиринт Кармы",
+        health: "Здоровье",
+        compatibility: "Совместимость",
+        bonusAstrology: "Бонус: Астрология",
+        learnMore: "Узнать подробнее",
+        formatHours: "1,5-2 часа",
+        formatPages: "Материал 5-15 страниц",
+        formatAudio: "Аудио / видео",
+        supportDays: "Поддержка 30 дней",
+        messageBooking: "Запись через сообщение",
         catalogTitle: "Разделы",
         catalogLead: "Короткая структура услуг и цен. Подробный состав каждого раздела можно уточнить при записи.",
         visualsTitle: "Визуальные материалы",
@@ -1222,44 +1246,47 @@
         blogTitle: "Блог",
         blogLead: "Новости, заметки и материалы каталога.",
         contactTitle: "Запись",
-        contactText: "Для записи напишите Фелиции в Telegram или WhatsApp. Укажите интересующий раздел и коротко опишите запрос.",
-        learnMore: "Узнать подробнее",
+        watchPackage: "Посмотреть пакет",
         readArticle: "Открыть статью полностью"
       },
       ro: {
-        pageTitle: "Felitzia - catalog de consultatii",
+        journeyLabel: "Felitzia · Numere și sensuri",
+        journeyTitle: "Fiecare drum are propriul univers.",
+        journeyScroll: "Derulează pentru a intra ↓",
+        journeySkip: "Spre consultații ↗",
         brandName: "Felitzia",
+        pageTitle: "Felitzia - catalog de consultatii",
         navPackage: "Pachet",
         navCatalog: "Catalog",
         navVisuals: "Materiale vizuale",
         navBlog: "Blog",
         navWhatsapp: "WhatsApp",
-        heroQuote: "Dumnezeu este Matematica!<br>Cifre, numere, sensuri.<br>Toata dezvoltarea Cosmosului -<br>miscare in spirala!",
+        heroQuote: "Dumnezeu este Matematica!<br>Cifre, numere, semnificatii.<br>Toata evolutia Cosmosului -<br>Este miscare in spirala!",
         heroMeta: "Numerologie<br>Tarot<br>Astrologie<br>Rune",
         heroEyebrow: "Catalog de consultatii",
-        heroTitle: "12 sfere pentru analiza drumului vietii",
+        heroTitle: "12 domenii pentru analiza drumului de viata",
         heroText: "Numerologie, Tarot, astrologie, rune, programe de neam, compatibilitate, directii de business si practici de autor intr-un catalog clar.",
-        telegramButton: "Scrie pe Telegram",
-        catalogButton: "Vezi catalogul",
-        packageButton: "Vezi pachetul",
-        stat1: "sfere de consultatii",
-        stat2: "pachet cu 4 sectiuni principale",
-        stat3: "ore format de consultatie",
-        stat4: "pagini de material",
+        writeTelegram: "Scrie pe Telegram",
+        watchCatalog: "Vezi catalogul",
+        statAreas: "domenii de consultatii",
+        statPackage: "pachet cu 4 sectiuni principale",
+        statHours: "ore formatul consultatiei",
+        statPages: "pagini de material",
         packageTitle: "Pachet",
-        packageLead: "Pachetul include 4 analize mari. A cincea sectiune este primita bonus.",
-        packageHeading: "4 sectiuni principale",
-        packagePriceText: "Fiecare sectiune separat — €50.<br>Daca sunt luate separat: €250.<br>Pret pachet: €200. Economie: €50.",
-        chipDestiny: "Programul destinului",
-        chipKarma: "Labirintul karmei",
-        chipHealth: "Sanatate",
-        chipCompatibility: "Compatibilitate",
-        chipAstrology: "Bonus: Astrologie",
-        packageList1: "1,5-2 ore",
-        packageList2: "Material 5-15 pagini",
-        packageList3: "Audio / video",
-        packageList4: "Suport 30 zile",
-        packageList5: "Programare prin mesaj",
+        packageLead: "Pachetul include 4 analize mari. A cincea sectiune este oferita ca bonus.",
+        packageName: "4 sectiuni principale",
+        packagePriceSummary: "Fiecare sectiune separat — €50.<br>Daca sunt luate separat: €250.<br>Pretul pachetului: €200. Economie: €50.",
+        programDestiny: "Programul destinului",
+        karmaLabyrinth: "Labirintul karmei",
+        health: "Sanatate",
+        compatibility: "Compatibilitate",
+        bonusAstrology: "Bonus: Astrologie",
+        learnMore: "Afla detalii",
+        formatHours: "1,5-2 ore",
+        formatPages: "Material 5-15 pagini",
+        formatAudio: "Audio / video",
+        supportDays: "Suport 30 de zile",
+        messageBooking: "Programare prin mesaj",
         catalogTitle: "Sectiuni",
         catalogLead: "Structura scurta a serviciilor si preturilor. Componenta detaliata se poate clarifica la programare.",
         visualsTitle: "Materiale vizuale",
@@ -1271,46 +1298,49 @@
         blogTitle: "Blog",
         blogLead: "Noutati, note si materiale din catalog.",
         contactTitle: "Programare",
-        contactText: "Pentru programare, scrie Felitziei pe Telegram sau WhatsApp. Indica sectiunea si descrie pe scurt intrebarea.",
-        learnMore: "Afla detalii",
+        watchPackage: "Vezi pachetul",
         readArticle: "Deschide articolul complet"
       },
       en: {
-        pageTitle: "Felitzia - consultation catalog",
+        journeyLabel: "Felitzia · Numbers and meaning",
+        journeyTitle: "Every path has its own universe.",
+        journeyScroll: "Scroll to enter ↓",
+        journeySkip: "Explore consultations ↗",
         brandName: "Felitzia",
+        pageTitle: "Felitzia - consultation catalog",
         navPackage: "Package",
         navCatalog: "Catalog",
         navVisuals: "Visual materials",
         navBlog: "Blog",
         navWhatsapp: "WhatsApp",
-        heroQuote: "God is Mathematics!<br>Digits, numbers, meanings.<br>All development of the Cosmos -<br>movement in a spiral!",
+        heroQuote: "God is Mathematics!<br>Digits, numbers, meanings.<br>All development of the Cosmos -<br>Moves in a spiral!",
         heroMeta: "Numerology<br>Tarot<br>Astrology<br>Runes",
         heroEyebrow: "Consultation catalog",
-        heroTitle: "12 spheres for reading the life path",
+        heroTitle: "12 areas for reading a life path",
         heroText: "Numerology, Tarot, astrology, runes, ancestral programs, compatibility, business directions and author practices in one clear catalog.",
-        telegramButton: "Message on Telegram",
-        catalogButton: "View catalog",
-        packageButton: "View package",
-        stat1: "consultation spheres",
-        stat2: "package with 4 main sections",
-        stat3: "hour consultation format",
-        stat4: "pages of material",
+        writeTelegram: "Write on Telegram",
+        watchCatalog: "View catalog",
+        statAreas: "consultation areas",
+        statPackage: "package of 4 main sections",
+        statHours: "hours consultation format",
+        statPages: "pages of material",
         packageTitle: "Package",
-        packageLead: "The package includes 4 large readings. The fifth section is received as a bonus.",
-        packageHeading: "4 main sections",
-        packagePriceText: "Each section separately — €50.<br>If bought separately: €250.<br>Package price: €200. Savings: €50.",
-        chipDestiny: "Destiny program",
-        chipKarma: "Karma Labyrinth",
-        chipHealth: "Health",
-        chipCompatibility: "Compatibility",
-        chipAstrology: "Bonus: Astrology",
-        packageList1: "1.5-2 hours",
-        packageList2: "5-15 pages of material",
-        packageList3: "Audio / video",
-        packageList4: "30 days support",
-        packageList5: "Booking by message",
+        packageLead: "The package includes 4 large readings. The fifth section is included as a bonus.",
+        packageName: "4 main sections",
+        packagePriceSummary: "Each section separately — €50.<br>Taken separately: €250.<br>Package price: €200. Savings: €50.",
+        programDestiny: "Destiny program",
+        karmaLabyrinth: "Karma Labyrinth",
+        health: "Health",
+        compatibility: "Compatibility",
+        bonusAstrology: "Bonus: Astrology",
+        learnMore: "Learn more",
+        formatHours: "1.5-2 hours",
+        formatPages: "5-15 pages of material",
+        formatAudio: "Audio / video",
+        supportDays: "30 days of support",
+        messageBooking: "Booking by message",
         catalogTitle: "Sections",
-        catalogLead: "A short structure of services and prices. The detailed contents can be clarified when booking.",
+        catalogLead: "A short structure of services and prices. The detailed content of each section can be clarified when booking.",
         visualsTitle: "Visual materials",
         visualsLead: "Schemes, charts, mandalas and separate visual materials from the catalog.",
         showVisuals: "Show all materials",
@@ -1320,15 +1350,14 @@
         blogTitle: "Blog",
         blogLead: "News, notes and catalog materials.",
         contactTitle: "Booking",
-        contactText: "To book, message Felitzia on Telegram or WhatsApp. Name the section and briefly describe your request.",
-        learnMore: "Learn more",
+        watchPackage: "View package",
         readArticle: "Open full article"
       }
     };
 
     const catalogItems = [
       {
-        title: { ru: "Программа судьбы", ro: "Programul destinului", en: "Destiny Program" },
+        title: { ru: "Программа судьбы", ro: "Programul destinului", en: "Destiny program" },
         tag: { ru: "Что входит в пакет", ro: "Inclus in pachet", en: "Included in package" },
         price: "€50",
         text: {
@@ -1748,5 +1777,6 @@
     setLanguage(currentLang);
     loadServerPosts();
   </script>
+  <script src="scripts/scroll-scene.js"></script>
 </body>
 </html>
