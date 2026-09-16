@@ -753,7 +753,7 @@
     }
   </style>
   <link rel="stylesheet" href="../assets/celestial-theme.css?v=20260907-2">
-</head>
+<link rel="stylesheet" href="../scripts/package-journey.css"></head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">
     <div class="nav-inner">
@@ -786,7 +786,9 @@
   <main>
     <div class="inner">
       <a class="back" data-link="catalog" data-ui="back" href="../index.html?lang=ru#catalog">Назад в каталог</a>
-      <div class="detail-hero has-visual">
+      <section class="package-journey" aria-label="Путешествие к пакету €200">
+        <div class="package-stage">
+          <div class="detail-hero has-visual package-layout">
         <div class="copy">
           <p class="eyebrow" data-field="label">Что входит в пакет</p>
           <h1 data-field="title">Пакет 4 главных раздела</h1>
@@ -797,11 +799,10 @@
             <a class="button secondary" data-link="catalog" data-ui="viewCatalog" href="../index.html?lang=ru#catalog">Смотреть каталог</a>
           </div>
         </div>
-        <figure class="section-visual">
-            <img src="../assets/package-main-visual.png" alt="Визуальный образ пакета Фелиции: нумерология, Таро, астрология и руны" data-field-alt="visualAlt">
-          </figure>
-      </div>
-
+            <figure class="section-visual package-frame"><canvas width="1024" height="768" aria-label="Через логотип к зелёной планете €200"></canvas></figure>
+          </div>
+        </div>
+      </section>
       <section class="list-panel">
         <h2 data-ui="detailsTitle">Подробная расшифровка</h2>
         <ul class="items" id="detail-items">
@@ -990,5 +991,5 @@
 
     setLanguage(currentLang);
   </script>
-</body>
+<script src="../scripts/package-journey.js"></script></body>
 </html>
