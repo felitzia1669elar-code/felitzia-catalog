@@ -165,12 +165,15 @@ function upsertIndexSeo(file) {
 
 function upsertArticleSeo(file) {
   let html = read(file);
-  if (!html.includes('rel="canonical" href="https://felitzia1669elar.md/article.html"')) {
+  html = html.replaceAll(`${site}/article.html`, `${site}/article`);
+  html = html.replaceAll('new URL("/article.html", window.location.origin)', 'new URL("/article", window.location.origin)');
+  html = html.replaceAll('window.history.replaceState(null, "", `article.html?${params.toString()}`);', 'window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);');
+  if (!html.includes('rel="canonical" href="https://felitzia1669elar.md/article"')) {
     html = html.replace(
       '<meta name="description" content="Статья блога Фелиции о нумерологии, циклах и совместимости.">',
       `<meta name="description" content="Статья блога Фелиции о нумерологии, циклах и совместимости.">
-  <link rel="canonical" href="${site}/article.html">
-  <link rel="alternate" hreflang="x-default" href="${site}/article.html">
+  <link rel="canonical" href="${site}/article">
+  <link rel="alternate" hreflang="x-default" href="${site}/article">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Фелиция 14 / 41">
   <meta property="og:title" content="Статья - Фелиция">
@@ -196,7 +199,7 @@ function upsertArticleSeo(file) {
     }
 
     function updateSeo(post, title) {
-      const canonical = new URL("/article.html", window.location.origin);
+      const canonical = new URL("/article", window.location.origin);
       if (articleId) canonical.searchParams.set("id", articleId);
       canonical.searchParams.set("lang", currentLang);
       document.querySelectorAll('link[rel="alternate"]').forEach((node) => node.remove());
@@ -204,7 +207,7 @@ function upsertArticleSeo(file) {
         const alternate = document.createElement("link");
         alternate.rel = "alternate";
         alternate.hreflang = lang;
-        const alternateUrl = new URL("/article.html", window.location.origin);
+        const alternateUrl = new URL("/article", window.location.origin);
         if (articleId) alternateUrl.searchParams.set("id", articleId);
         alternateUrl.searchParams.set("lang", lang);
         alternate.href = alternateUrl.href;
@@ -246,8 +249,10 @@ function upsertDetailSeo(file) {
   let html = read(file);
   const publicPath = `/${file
     .replace(/^dist[\\/]/, "")
-    .replaceAll(path.sep, "/")}`;
+    .replaceAll(path.sep, "/")
+    .replace(/\.html$/, "")}`;
   const canonical = `${site}${publicPath}`;
+  html = html.replaceAll(`${canonical}.html`, canonical);
   html = addHeadBlock(
     html,
     `  <link rel="canonical" href="${canonical}">
@@ -359,12 +364,12 @@ function addUrlGroup(pathname, priority = "0.7", changefreq = "monthly", lastmod
 addUrlGroup("/", "1.0", "weekly");
 
 for (const name of fs.readdirSync(detailDir).filter((entry) => entry.endsWith(".html")).sort()) {
-  addUrlGroup(`/details/${name}`, "0.8", "monthly");
+  addUrlGroup(`/details/${name.replace(/\.html$/, "")}`, "0.8", "monthly");
 }
 
 for (const post of posts) {
   if (!post.id) continue;
-  const base = `/article.html?id=${encodeURIComponent(post.id)}`;
+  const base = `/article?id=${encodeURIComponent(post.id)}`;
   const alternates = [
     { lang: "x-default", href: `${site}${base}&lang=ru` },
     ...languages.map((lang) => ({ lang, href: `${site}${base}&lang=${lang}` })),

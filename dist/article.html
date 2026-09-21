@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Статья блога Фелиции о нумерологии, циклах и совместимости.">
-  <link rel="canonical" href="https://felitzia1669elar.md/article.html">
-  <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/article.html">
+  <link rel="canonical" href="https://felitzia1669elar.md/article">
+  <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/article">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Фелиция 14 / 41">
   <meta property="og:title" content="Статья - Фелиция">
   <meta property="og:description" content="Статья блога Фелиции о нумерологии, циклах и совместимости.">
-  <meta property="og:url" content="https://felitzia1669elar.md/article.html">
+  <meta property="og:url" content="https://felitzia1669elar.md/article">
   <link rel="icon" href="data:,">
   <title>Статья - Фелиция</title>
   <style>
@@ -584,7 +584,7 @@
     }
 
     function updateSeo(post, title) {
-      const canonical = new URL("/article.html", window.location.origin);
+      const canonical = new URL("/article", window.location.origin);
       if (articleId) canonical.searchParams.set("id", articleId);
       canonical.searchParams.set("lang", currentLang);
       document.querySelectorAll('link[rel="alternate"]').forEach((node) => node.remove());
@@ -592,7 +592,7 @@
         const alternate = document.createElement("link");
         alternate.rel = "alternate";
         alternate.hreflang = lang;
-        const alternateUrl = new URL("/article.html", window.location.origin);
+        const alternateUrl = new URL("/article", window.location.origin);
         if (articleId) alternateUrl.searchParams.set("id", articleId);
         alternateUrl.searchParams.set("lang", lang);
         alternate.href = alternateUrl.href;
@@ -661,7 +661,7 @@
         currentLang = supportedLanguages.includes(button.dataset.lang) ? button.dataset.lang : "ru";
         params.set("lang", currentLang);
         if (articleId) params.set("id", articleId);
-        window.history.replaceState(null, "", `article.html?${params.toString()}`);
+        window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
         renderArticle();
       });
     });
