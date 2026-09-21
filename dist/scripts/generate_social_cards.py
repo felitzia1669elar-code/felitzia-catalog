@@ -3,6 +3,7 @@ from __future__ import annotations
 import html
 import math
 import re
+import sys
 import textwrap
 from dataclasses import dataclass
 from pathlib import Path
@@ -39,6 +40,11 @@ RODOLOGIYA_PROGNOSTIKA_DESCRIPTION = (
     "определить энергетический потенциал, ключевые задачи\n"
     "и вероятные тенденции в жизни человека\n"
     "на определенный период: год, месяц или день."
+)
+PACKAGE_PRICE_SUMMARY = (
+    "Каждый раздел отдельно — €50.\n"
+    "Если брать по отдельности: €250.\n"
+    "Цена пакета: €200. Экономия: €50."
 )
 
 
@@ -88,10 +94,10 @@ def extract_one(pattern: str, text: str, default: str = "") -> str:
 
 def parse_detail(slug: str, filename: str, fallback_title: str) -> Card:
     text = (ROOT / "details" / filename).read_text()
-    title = extract_one(r"<h1>(.*?)</h1>", text, fallback_title)
-    price = extract_one(r'<div class="price">(.*?)</div>', text, "")
-    lead = extract_one(r'<p class="lead">(.*?)</p>', text, "")
-    eyebrow = extract_one(r'<p class="eyebrow">(.*?)</p>', text, "Раздел")
+    title = extract_one(r"<h1[^>]*>(.*?)</h1>", text, fallback_title)
+    price = extract_one(r'<div class="price"[^>]*>(.*?)</div>', text, "")
+    lead = extract_one(r'<p class="lead"[^>]*>(.*?)</p>', text, "")
+    eyebrow = extract_one(r'<p class="eyebrow"[^>]*>(.*?)</p>', text, "Раздел")
     list_section = re.search(r'<ul class="items" id="detail-items">(.*?)</ul>', text, re.S)
     item_source = list_section.group(1) if list_section else text
     items = [
@@ -99,12 +105,12 @@ def parse_detail(slug: str, filename: str, fallback_title: str) -> Card:
         for item in re.findall(r"<li>\s*<span[^>]*>.*?</span>\s*<div>\s*<h3>(.*?)</h3>", item_source, re.S)
     ]
 
-    if title in {"Программа судьбы", "Лабиринт Кармы", "Здоровье", "Совместимость"}:
+    if title in {"Программа судьбы", "Лабиринт Кармы", "Астрология", "Совместимость"}:
         note = "Этот раздел входит в пакет 4 главных раздела."
     elif title == "Астрология":
-        note = "Отдельно стоит €50, в пакете идёт бонусом."
+        note = "Отдельно стоит €50, входит в пакет 4 главных раздела."
     elif title.startswith("Пакет"):
-        note = "Пакет: 4 главных раздела + бонус Астрология."
+        note = "Пакет: 4 главных раздела + бонус «Астрология»."
     else:
         note = "Можно заказать отдельным разделом."
 
@@ -583,7 +589,7 @@ def draw_package_list_feed(img: Image.Image, draw: ImageDraw.ImageDraw, card: Ca
     primary = card.items[:4]
     bonus = card.items[4:5]
     details = card.items[5:9]
-    price = card.items[9:10]
+    price = [PACKAGE_PRICE_SUMMARY]
 
     draw_composition_heading(draw, 624, "СОСТАВ ПАКЕТА", 1080, size=23)
     draw_readable_item_list(
@@ -623,8 +629,8 @@ def draw_package_list_feed(img: Image.Image, draw: ImageDraw.ImageDraw, card: Ca
         img,
         draw,
         price,
-        (120, 1032, 960, 1108),
-        start_size=27,
+        (120, 1026, 960, 1124),
+        start_size=25,
         min_size=18,
         max_cols=1,
         start_index=10,
@@ -635,7 +641,7 @@ def draw_package_list_story(img: Image.Image, draw: ImageDraw.ImageDraw, card: C
     primary = card.items[:4]
     bonus = card.items[4:5]
     details = card.items[5:9]
-    price = card.items[9:10]
+    price = [PACKAGE_PRICE_SUMMARY]
 
     draw_composition_heading(draw, 765, "СОСТАВ ПАКЕТА", 1080, size=28)
     draw_readable_item_list(
@@ -675,9 +681,9 @@ def draw_package_list_story(img: Image.Image, draw: ImageDraw.ImageDraw, card: C
         img,
         draw,
         price,
-        (108, 1310, 972, 1430),
-        start_size=36,
-        min_size=24,
+        (108, 1310, 972, 1460),
+        start_size=32,
+        min_size=22,
         max_cols=1,
         start_index=10,
     )
@@ -955,6 +961,9 @@ def main() -> None:
     FEED_DIR.mkdir(parents=True, exist_ok=True)
     STORY_DIR.mkdir(parents=True, exist_ok=True)
     cards = build_cards()
+    requested = set(sys.argv[1:])
+    if requested:
+        cards = [card for card in cards if card.slug in requested]
     feed_paths = []
     story_paths = []
 
@@ -965,6 +974,12 @@ def main() -> None:
         draw_story_card(card, idx).save(story_path, optimize=True)
         feed_paths.append(feed_path)
         story_paths.append(story_path)
+
+    if requested:
+        print(f"cards={len(cards)}")
+        print(f"feed={len(feed_paths)} {FEED_DIR}")
+        print(f"stories={len(story_paths)} {STORY_DIR}")
+        return
 
     save_contact_sheet(feed_paths, OUT_ROOT / "preview-facebook-posts.png", (216, 270))
     save_contact_sheet(story_paths, OUT_ROOT / "preview-stories.png", (135, 240))

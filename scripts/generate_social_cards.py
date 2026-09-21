@@ -94,10 +94,10 @@ def extract_one(pattern: str, text: str, default: str = "") -> str:
 
 def parse_detail(slug: str, filename: str, fallback_title: str) -> Card:
     text = (ROOT / "details" / filename).read_text()
-    title = extract_one(r"<h1>(.*?)</h1>", text, fallback_title)
-    price = extract_one(r'<div class="price">(.*?)</div>', text, "")
-    lead = extract_one(r'<p class="lead">(.*?)</p>', text, "")
-    eyebrow = extract_one(r'<p class="eyebrow">(.*?)</p>', text, "Раздел")
+    title = extract_one(r"<h1[^>]*>(.*?)</h1>", text, fallback_title)
+    price = extract_one(r'<div class="price"[^>]*>(.*?)</div>', text, "")
+    lead = extract_one(r'<p class="lead"[^>]*>(.*?)</p>', text, "")
+    eyebrow = extract_one(r'<p class="eyebrow"[^>]*>(.*?)</p>', text, "Раздел")
     list_section = re.search(r'<ul class="items" id="detail-items">(.*?)</ul>', text, re.S)
     item_source = list_section.group(1) if list_section else text
     items = [
@@ -105,12 +105,12 @@ def parse_detail(slug: str, filename: str, fallback_title: str) -> Card:
         for item in re.findall(r"<li>\s*<span[^>]*>.*?</span>\s*<div>\s*<h3>(.*?)</h3>", item_source, re.S)
     ]
 
-    if title in {"Программа судьбы", "Лабиринт Кармы", "Здоровье", "Совместимость"}:
+    if title in {"Программа судьбы", "Лабиринт Кармы", "Астрология", "Совместимость"}:
         note = "Этот раздел входит в пакет 4 главных раздела."
     elif title == "Астрология":
-        note = "Отдельно стоит €50, в пакете идёт бонусом."
+        note = "Отдельно стоит €50, входит в пакет 4 главных раздела."
     elif title.startswith("Пакет"):
-        note = "Пакет: 4 главных раздела + бонус Астрология."
+        note = "Пакет: 4 главных раздела + бонус «Астрология»."
     else:
         note = "Можно заказать отдельным разделом."
 

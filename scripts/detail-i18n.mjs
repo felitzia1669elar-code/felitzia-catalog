@@ -84,7 +84,7 @@ export const detailPageCopy = {
     visualAlt: { ro: "Imaginea vizuala a sectiunii Labirintul karmei", en: "Visual image for the Karma Labyrinth section" },
   },
   zdorovye: {
-    label: { ro: "Ce include pachetul", en: "What is included in the package" },
+    label: { ro: "Sectiune separata", en: "Separate section" },
     title: { ro: "Sanatate", en: "Health" },
     lead: {
       ro: "Pasaport de sanatate, aura, structura energetica si prognoza.",
@@ -102,11 +102,11 @@ export const detailPageCopy = {
     visualAlt: { ro: "Imaginea vizuala a sectiunii Compatibilitate", en: "Visual image for the Compatibility section" },
   },
   astrologiya: {
-    label: { ro: "Bonus la pachet", en: "Package bonus" },
+    label: { ro: "Inclus in pachet", en: "Included in package" },
     title: { ro: "Astrologie", en: "Astrology" },
     lead: {
-      ro: "Separat costa €50, iar in pachet este oferita ca bonus.",
-      en: "Separately it costs €50, and inside the package it is included as a bonus.",
+      ro: "Separat costa €50, este inclusa in pachetul celor 4 sectiuni principale.",
+      en: "Separately €50, included in the package of 4 main sections.",
     },
     visualAlt: { ro: "Imaginea vizuala a sectiunii Astrologie", en: "Visual image for the Astrology section" },
   },
@@ -197,6 +197,13 @@ export const detailItemCopy = {
       en: "Gives a symbolic map of body and energy themes so the client can treat their state with more care.",
     },
   },
+  "Астрология": {
+    title: { ro: "Astrologie", en: "Astrology" },
+    text: {
+      ro: "Adauga un strat astrologic pachetului si ajuta la clarificarea perioadelor, accentelor si ciclurilor personale.",
+      en: "Adds an astrological layer to the package and clarifies periods, accents and personal cycles.",
+    },
+  },
   "Совместимость": {
     title: { ro: "Compatibilitate", en: "Compatibility" },
     text: {
@@ -209,6 +216,13 @@ export const detailItemCopy = {
     text: {
       ro: "Adauga un strat astrologic pachetului si ajuta la clarificarea perioadelor, accentelor si ciclurilor personale.",
       en: "Adds an astrological layer to the package and clarifies periods, accents and personal cycles.",
+    },
+  },
+  "Бонус: Имя как лекарство": {
+    title: { ro: "Bonus: Numele ca leac", en: "Bonus: Name as medicine" },
+    text: {
+      ro: "Adauga o tema bonus in valoare de €50: cum numele poate functiona ca resursa personala si indiciu.",
+      en: "Adds a bonus topic worth €50: how the name can work as a personal resource and clue.",
     },
   },
   "Формат 1,5-2 часа": {
@@ -239,10 +253,10 @@ export const detailItemCopy = {
       en: "The client can ask follow-up questions after the consultation as the material starts unfolding in life.",
     },
   },
-  "Отдельно эти разделы стоят €250. Цена пакета: €200. Экономия: €50.": {
+  "Каждый раздел отдельно — €50. Если брать по отдельности: €250. Цена пакета: €200. Экономия: €50.": {
     title: {
-      ro: "Separat aceste sectiuni costa €250. Pretul pachetului: €200. Economie: €50.",
-      en: "Separately these sections cost €250. Package price: €200. Savings: €50.",
+      ro: "Fiecare sectiune separat — €50. Daca sunt luate separat: €250. Pretul pachetului: €200. Economie: €50.",
+      en: "Each section separately — €50. Taken separately: €250. Package price: €200. Savings: €50.",
     },
     text: {
       ro: "Arata avantajul financiar al pachetului si ajuta la alegerea unei analize complete.",
