@@ -17,6 +17,7 @@
   <meta property="og:url" content="https://felitzia1669elar.md/">
   <link rel="icon" href="data:,">
   <title>Фелиция - каталог консультаций</title>
+  <script type="application/ld+json" id="site-schema">{"@context":"https://schema.org","@graph":[{"@type":["Person","Organization"],"@id":"https://felitzia1669elar.md/#organization","name":"Фелиция 14 / 41","url":"https://felitzia1669elar.md/","image":"https://felitzia1669elar.md/assets/home-main-visual.png","sameAs":["https://www.facebook.com/inna.mazurok.252196","https://www.instagram.com/felitzia1669","https://www.youtube.com/@felizia1669"]},{"@type":"WebSite","@id":"https://felitzia1669elar.md/#website","url":"https://felitzia1669elar.md/","name":"Фелиция - каталог консультаций","inLanguage":"ru","description":"Фелиция: консультации по нумерологии, астрологии, Таро, рунам, совместимости, родовым программам, карме, здоровью, профессии, бизнесу и финансам.","publisher":{"@id":"https://felitzia1669elar.md/#organization"}}]}</script>
   <style>
     :root {
       --navy: #08131f;
@@ -743,6 +744,81 @@
       font-weight: 700;
     }
 
+
+    .seo-overview {
+      padding: 72px 0 34px;
+    }
+
+    .seo-panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(201, 154, 62, .26);
+      border-radius: 34px;
+      background: linear-gradient(135deg, rgba(255, 253, 248, .95), rgba(243, 230, 200, .42));
+      box-shadow: 0 22px 54px rgba(8, 19, 31, .08);
+      padding: 34px;
+    }
+
+    .seo-panel::before {
+      content: "";
+      position: absolute;
+      inset: auto -80px -150px auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(142, 216, 248, .28), transparent 68%);
+      pointer-events: none;
+    }
+
+    .seo-panel h2 {
+      max-width: 850px;
+      margin: 10px 0 14px;
+      color: var(--sapphire);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: .98;
+    }
+
+    .seo-panel > p:not(.eyebrow) {
+      max-width: 930px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .seo-keyword-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .seo-topic {
+      min-height: 180px;
+      border: 1px solid rgba(201, 154, 62, .24);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .74);
+      padding: 20px;
+    }
+
+    .seo-topic h3 {
+      margin: 0 0 10px;
+      color: var(--sapphire);
+      font-size: 20px;
+    }
+
+    .seo-topic p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
     .final {
       position: relative;
       overflow: hidden;
@@ -877,6 +953,10 @@
       .grid,
       .blog-grid,
       .gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .seo-keyword-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -1030,6 +1110,32 @@
         height: 50px;
       }
 
+
+      .seo-overview {
+        padding: 44px 0 22px;
+      }
+
+      .seo-panel {
+        border-radius: 26px;
+        padding: 24px 16px;
+      }
+
+      .seo-panel h2 {
+        font-size: 34px;
+      }
+
+      .seo-panel > p:not(.eyebrow) {
+        font-size: 16px;
+      }
+
+      .seo-keyword-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .seo-topic {
+        min-height: 0;
+      }
+
       .final {
         padding-bottom: 110px;
       }
@@ -1102,6 +1208,22 @@
       </div>
     </div>
   </header>
+
+  <section id="seo-overview" class="seo-overview" aria-labelledby="seo-overview-title">
+    <div class="section-inner">
+      <div class="seo-panel">
+        <p class="eyebrow" data-i18n="seoEyebrow">Нумерология · Астрология · Таро · Руны</p>
+        <h2 id="seo-overview-title" data-i18n="seoTitle">Нумерология, астрология, Таро и руны — консультации Фелиции</h2>
+        <p data-i18n="seoLead">На сайте собраны консультации по нумерологии, астрологии, Таро, рунам, совместимости, матрице судьбы, родовым программам, карме, здоровью, профессии, бизнесу и финансам.</p>
+        <div class="seo-keyword-grid" aria-label="Основные направления консультаций">
+          <article class="seo-topic"><h3 data-i18n="seoNumerologyTitle">Нумерология</h3><p data-i18n="seoNumerologyText">Разбор даты рождения, матрицы судьбы, программы души, личных циклов, предназначения, профессии, денег и жизненных периодов.</p></article>
+          <article class="seo-topic"><h3 data-i18n="seoAstrologyTitle">Астрология</h3><p data-i18n="seoAstrologyText">Формула души, динамический гороскоп, солярные карты, неподвижные звёзды и астрокартография для выбора направления.</p></article>
+          <article class="seo-topic"><h3 data-i18n="seoTarotTitle">Таро, руны и мантика</h3><p data-i18n="seoTarotText">Расклады Таро, руническая диагностика, руновязи, амулеты, магические квадраты и практики для конкретного вопроса.</p></article>
+          <article class="seo-topic"><h3 data-i18n="seoCompatibilityTitle">Совместимость и род</h3><p data-i18n="seoCompatibilityText">Совместимость пары, семьи и партнёрства, родология, кармические уроки, родовые программы и сценарии отношений.</p></article>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="package">
     <div class="section-inner">
@@ -1225,6 +1347,17 @@
         heroEyebrow: "Каталог консультаций",
         heroTitle: "12 сфер для разбора жизненного пути",
         heroText: "Нумерология, Таро, астрология, руны, родовые программы, совместимость, бизнес-направления и авторские практики в одном понятном каталоге.",
+        seoEyebrow: "Нумерология · Астрология · Таро · Руны",
+        seoTitle: "Нумерология, астрология, Таро и руны — консультации Фелиции",
+        seoLead: "На сайте собраны консультации по нумерологии, астрологии, Таро, рунам, совместимости, матрице судьбы, родовым программам, карме, здоровью, профессии, бизнесу и финансам.",
+        seoNumerologyTitle: "Нумерология",
+        seoNumerologyText: "Разбор даты рождения, матрицы судьбы, программы души, личных циклов, предназначения, профессии, денег и жизненных периодов.",
+        seoAstrologyTitle: "Астрология",
+        seoAstrologyText: "Формула души, динамический гороскоп, солярные карты, неподвижные звёзды и астрокартография для выбора направления.",
+        seoTarotTitle: "Таро, руны и мантика",
+        seoTarotText: "Расклады Таро, руническая диагностика, руновязи, амулеты, магические квадраты и практики для конкретного вопроса.",
+        seoCompatibilityTitle: "Совместимость и род",
+        seoCompatibilityText: "Совместимость пары, семьи и партнёрства, родология, кармические уроки, родовые программы и сценарии отношений.",
         writeTelegram: "Написать в Telegram",
         watchCatalog: "Смотреть каталог",
         statAreas: "сфер консультаций",
@@ -1277,6 +1410,17 @@
         heroEyebrow: "Catalog de consultatii",
         heroTitle: "12 domenii pentru analiza drumului de viata",
         heroText: "Numerologie, Tarot, astrologie, rune, programe de neam, compatibilitate, directii de business si practici de autor intr-un catalog clar.",
+        seoEyebrow: "Numerologie · Astrologie · Tarot · Rune",
+        seoTitle: "Numerologie, astrologie, Tarot și rune — consultații Felitzia",
+        seoLead: "Pe site sunt adunate consultații de numerologie, astrologie, Tarot, rune, compatibilitate, matricea destinului, programe de neam, karmă, sănătate, profesie, business și finanțe.",
+        seoNumerologyTitle: "Numerologie",
+        seoNumerologyText: "Analiza datei de naștere, matricea destinului, programul sufletului, cicluri personale, menire, profesie, bani și perioade de viață.",
+        seoAstrologyTitle: "Astrologie",
+        seoAstrologyText: "Formula sufletului, horoscop dinamic, hărți solare, stele fixe și astrocartografie pentru alegerea direcției.",
+        seoTarotTitle: "Tarot, rune și mantica",
+        seoTarotText: "Etalări Tarot, diagnostic runic, runoviaz, amulete, pătrate magice și practici pentru o întrebare concretă.",
+        seoCompatibilityTitle: "Compatibilitate și neam",
+        seoCompatibilityText: "Compatibilitatea cuplului, familiei și parteneriatului, rodologie, lecții karmice, programe de neam și scenarii relaționale.",
         writeTelegram: "Scrie pe Telegram",
         watchCatalog: "Vezi catalogul",
         statAreas: "domenii de consultatii",
@@ -1329,6 +1473,17 @@
         heroEyebrow: "Consultation catalog",
         heroTitle: "12 areas for reading a life path",
         heroText: "Numerology, Tarot, astrology, runes, ancestral programs, compatibility, business directions and author practices in one clear catalog.",
+        seoEyebrow: "Numerology · Astrology · Tarot · Runes",
+        seoTitle: "Numerology, astrology, Tarot and runes — Felitzia consultations",
+        seoLead: "The site brings together consultations in numerology, astrology, Tarot, runes, compatibility, destiny matrix, ancestral programs, karma, health, career, business and finance.",
+        seoNumerologyTitle: "Numerology",
+        seoNumerologyText: "Readings of birth date, destiny matrix, soul program, personal cycles, purpose, career, money and life periods.",
+        seoAstrologyTitle: "Astrology",
+        seoAstrologyText: "Soul formula, dynamic horoscope, solar charts, fixed stars and astrocartography for choosing a direction.",
+        seoTarotTitle: "Tarot, runes and mantic practice",
+        seoTarotText: "Tarot spreads, rune diagnostics, bindrunes, amulets, magic squares and practices for a specific question.",
+        seoCompatibilityTitle: "Compatibility and lineage",
+        seoCompatibilityText: "Compatibility for couples, family and partnership, lineage readings, karmic lessons, ancestral programs and relationship patterns.",
         writeTelegram: "Write on Telegram",
         watchCatalog: "View catalog",
         statAreas: "consultation areas",
@@ -1398,6 +1553,7 @@
       setSeoMeta('meta[property="og:title"]', "content", seo.title);
       setSeoMeta('meta[property="og:description"]', "content", seo.description);
       setSeoMeta('meta[property="og:url"]', "content", canonical);
+      updateStructuredData();
     }
 
     const catalogItems = [
@@ -1594,6 +1750,38 @@
         }
       }
     ];
+
+
+    function cleanPublicUrl(href) {
+      const url = new URL(href, "https://felitzia1669elar.md/");
+      url.pathname = url.pathname.replace(/\.html$/, "");
+      return url.href;
+    }
+
+    function numericPrice(price) {
+      const value = String(price || "").replace(/[^0-9.,]/g, "").replace(",", ".");
+      return value || undefined;
+    }
+
+    function updateStructuredData() {
+      const seo = seoMeta[currentLang] || seoMeta.ru;
+      const canonical = languageUrl(currentLang);
+      let script = document.getElementById("site-schema");
+      if (!script) {
+        script = document.createElement("script");
+        script.type = "application/ld+json";
+        script.id = "site-schema";
+        document.head.appendChild(script);
+      }
+      const provider = {"@type": ["Person", "Organization"], "@id": "https://felitzia1669elar.md/#organization", name: "Фелиция 14 / 41", url: "https://felitzia1669elar.md/", image: "https://felitzia1669elar.md/assets/home-main-visual.png", sameAs: ["https://www.facebook.com/inna.mazurok.252196", "https://www.instagram.com/felitzia1669", "https://www.youtube.com/@felizia1669"]};
+      const services = catalogItems.map((item) => {
+        const url = cleanPublicUrl(item.href);
+        const price = numericPrice(item.price);
+        return {"@type": "Service", "@id": `${url}#service`, name: localize(item.title), description: localize(item.text), serviceType: localize(item.title), provider: {"@id": provider["@id"]}, areaServed: ["Moldova", "Romania", "Europe"], url, offers: {"@type": "Offer", priceCurrency: "EUR", ...(price ? { price } : {}), availability: "https://schema.org/InStock", url}};
+      });
+      const graph = [provider, {"@type": "WebSite", "@id": "https://felitzia1669elar.md/#website", url: canonical, name: seo.title, description: seo.description, inLanguage: currentLang, publisher: {"@id": provider["@id"]}}, {"@type": "ItemList", "@id": "https://felitzia1669elar.md/#services", name: translations[currentLang].catalogTitle, itemListElement: services.map((service, index) => ({"@type": "ListItem", position: index + 1, name: service.name, url: service.url}))}, ...services];
+      script.textContent = JSON.stringify({"@context": "https://schema.org", "@graph": graph});
+    }
 
     const visualMaterials = [
       { src: "assets/visual-materials/astrologicheskaya-karta-rozhdeniya.png", label: { ru: "Нумероскоп", ro: "Numeroscop", en: "Numeroscope" } },
