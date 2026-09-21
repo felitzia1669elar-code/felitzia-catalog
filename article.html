@@ -4,6 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Статья блога Фелиции о нумерологии, циклах и совместимости.">
+  <link rel="canonical" href="https://felitzia1669elar.md/article.html">
+  <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/article.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Фелиция 14 / 41">
+  <meta property="og:title" content="Статья - Фелиция">
+  <meta property="og:description" content="Статья блога Фелиции о нумерологии, циклах и совместимости.">
+  <meta property="og:url" content="https://felitzia1669elar.md/article.html">
   <link rel="icon" href="data:,">
   <title>Статья - Фелиция</title>
   <style>
@@ -563,6 +570,54 @@
       document.getElementById("back-link").href = `index.html?lang=${encodeURIComponent(currentLang)}#blog`;
     }
 
+    function setMeta(selector, attr, value) {
+      let node = document.head.querySelector(selector);
+      if (!node) {
+        node = document.createElement("meta");
+        const propertyMatch = selector.match(/property="([^"]+)/);
+        const nameMatch = selector.match(/name="([^"]+)/);
+        if (propertyMatch) node.setAttribute("property", propertyMatch[1]);
+        if (nameMatch) node.setAttribute("name", nameMatch[1]);
+        document.head.appendChild(node);
+      }
+      node.setAttribute(attr, value);
+    }
+
+    function updateSeo(post, title) {
+      const canonical = new URL("/article.html", window.location.origin);
+      if (articleId) canonical.searchParams.set("id", articleId);
+      canonical.searchParams.set("lang", currentLang);
+      document.querySelectorAll('link[rel="alternate"]').forEach((node) => node.remove());
+      for (const lang of supportedLanguages) {
+        const alternate = document.createElement("link");
+        alternate.rel = "alternate";
+        alternate.hreflang = lang;
+        const alternateUrl = new URL("/article.html", window.location.origin);
+        if (articleId) alternateUrl.searchParams.set("id", articleId);
+        alternateUrl.searchParams.set("lang", lang);
+        alternate.href = alternateUrl.href;
+        document.head.appendChild(alternate);
+      }
+      const defaultAlternate = document.createElement("link");
+      defaultAlternate.rel = "alternate";
+      defaultAlternate.hreflang = "x-default";
+      defaultAlternate.href = canonical.href;
+      document.head.appendChild(defaultAlternate);
+      let link = document.head.querySelector('link[rel="canonical"]');
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "canonical";
+        document.head.appendChild(link);
+      }
+      link.href = canonical.href;
+      const description = localize(post.text) || "Статья блога Фелиции о нумерологии, циклах и совместимости.";
+      setMeta('meta[name="description"]', "content", description);
+      setMeta('meta[property="og:title"]', "content", title + " - " + ui[currentLang].brandName);
+      setMeta('meta[property="og:description"]', "content", description);
+      setMeta('meta[property="og:url"]', "content", canonical.href);
+      setMeta('meta[property="og:image"]', "content", new URL(post.image, window.location.origin).href);
+    }
+
     function renderArticle() {
       updateLanguageLinks();
       const holder = document.getElementById("article");
@@ -583,6 +638,7 @@
 
       const title = localize(post.title);
       document.title = `${title} - ${ui[currentLang].brandName}`;
+      updateSeo(post, title);
       holder.innerHTML = `
         <img class="article-image" src="${escapeHtml(post.image)}" alt="${escapeHtml(title)}">
         <div class="article-body">

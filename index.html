@@ -3,7 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Фелиция: каталог консультаций по нумерологии, Таро, астрологии, рунам, совместимости, Родологии и авторским практикам.">
+  <meta name="description" content="Фелиция: консультации по нумерологии, астрологии, Таро, рунам, совместимости, родовым программам, карме, здоровью, профессии, бизнесу и финансам.">
+  <meta name="keywords" content="нумерология, астрология, таро, руны, совместимость, матрица судьбы, программа судьбы, лабиринт кармы, родология, регрессонумерология, консультации Фелиция">
+  <link rel="canonical" href="https://felitzia1669elar.md/">
+  <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/">
+  <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/">
+  <link rel="alternate" hreflang="ro" href="https://felitzia1669elar.md/?lang=ro">
+  <link rel="alternate" hreflang="en" href="https://felitzia1669elar.md/?lang=en">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Фелиция 14 / 41">
+  <meta property="og:title" content="Фелиция - каталог консультаций">
+  <meta property="og:description" content="Фелиция: консультации по нумерологии, астрологии, Таро, рунам, совместимости, родовым программам, карме, здоровью, профессии, бизнесу и финансам.">
+  <meta property="og:url" content="https://felitzia1669elar.md/">
   <link rel="icon" href="data:,">
   <title>Фелиция - каталог консультаций</title>
   <style>
@@ -1355,6 +1366,40 @@
       }
     };
 
+    const seoMeta = {"ru":{"title":"Фелиция - каталог консультаций","description":"Фелиция: консультации по нумерологии, астрологии, Таро, рунам, совместимости, родовым программам, карме, здоровью, профессии, бизнесу и финансам.","keywords":"нумерология, астрология, таро, руны, совместимость, матрица судьбы, программа судьбы, лабиринт кармы, родология, регрессонумерология, консультации Фелиция"},"ro":{"title":"Felitzia - catalog de consultații","description":"Felitzia: consultații de numerologie, astrologie, Tarot, rune, compatibilitate, programe de neam, karmă, sănătate, carieră, business și finanțe.","keywords":"numerologie, astrologie, tarot, rune, compatibilitate, destin, karmă, programe de neam, regresonumerologie, consultații Felitzia"},"en":{"title":"Felitzia - consultation catalog","description":"Felitzia: consultations in numerology, astrology, Tarot, runes, compatibility, ancestral programs, karma, health, career, business and finance.","keywords":"numerology, astrology, tarot, runes, compatibility, destiny matrix, karma, ancestral programs, regression numerology, Felitzia consultations"}};
+
+    function setSeoMeta(selector, attr, value) {
+      let node = document.head.querySelector(selector);
+      if (!node) {
+        node = document.createElement(selector.startsWith("link") ? "link" : "meta");
+        if (selector.includes("canonical")) node.setAttribute("rel", "canonical");
+        const propertyMatch = selector.match(/property="([^"]+)/);
+        const nameMatch = selector.match(/name="([^"]+)/);
+        if (propertyMatch) node.setAttribute("property", propertyMatch[1]);
+        if (nameMatch) node.setAttribute("name", nameMatch[1]);
+        document.head.appendChild(node);
+      }
+      node.setAttribute(attr, value);
+    }
+
+    function languageUrl(lang) {
+      const url = new URL("/", window.location.origin);
+      if (lang !== "ru") url.searchParams.set("lang", lang);
+      return url.href;
+    }
+
+    function updateHomeSeo() {
+      const seo = seoMeta[currentLang] || seoMeta.ru;
+      const canonical = languageUrl(currentLang);
+      document.title = seo.title;
+      setSeoMeta('meta[name="description"]', "content", seo.description);
+      setSeoMeta('meta[name="keywords"]', "content", seo.keywords);
+      setSeoMeta('link[rel="canonical"]', "href", canonical);
+      setSeoMeta('meta[property="og:title"]', "content", seo.title);
+      setSeoMeta('meta[property="og:description"]', "content", seo.description);
+      setSeoMeta('meta[property="og:url"]', "content", canonical);
+    }
+
     const catalogItems = [
       {
         title: { ru: "Программа судьбы", ro: "Programul destinului", en: "Destiny program" },
@@ -1595,11 +1640,12 @@
         .replaceAll('"', "&quot;");
     }
 
-    function setLanguage(lang) {
+    function setLanguage(lang, updateUrl = false) {
       currentLang = translations[lang] ? lang : "ru";
       localStorage.setItem("felitziaLang", currentLang);
       document.documentElement.lang = currentLang;
       document.title = translations[currentLang].pageTitle;
+      updateHomeSeo();
       document.querySelectorAll("[data-i18n]").forEach((node) => {
         const key = node.dataset.i18n;
         if (translations[currentLang][key]) node.innerHTML = translations[currentLang][key];
@@ -1613,6 +1659,13 @@
       document.querySelectorAll("[data-detail-base]").forEach((link) => {
         link.href = `${link.dataset.detailBase}?lang=${currentLang}`;
       });
+      if (updateUrl) {
+        const nextUrl = new URL(window.location.href);
+        if (currentLang === "ru") nextUrl.searchParams.delete("lang");
+        else nextUrl.searchParams.set("lang", currentLang);
+        window.history.replaceState(null, "", nextUrl);
+        updateHomeSeo();
+      }
     }
 
     function renderCatalog() {
@@ -1771,7 +1824,7 @@
     }
 
     document.querySelectorAll(".lang-button").forEach((button) => {
-      button.addEventListener("click", () => setLanguage(button.dataset.lang));
+      button.addEventListener("click", () => setLanguage(button.dataset.lang, true));
     });
 
     document.getElementById("visual-toggle").addEventListener("click", () => {

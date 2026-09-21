@@ -4,6 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Профессия / Карьера - подробное описание раздела каталога консультаций Фелиции.">
+  <link rel="canonical" href="https://felitzia1669elar.md/details/professiya-kariera.html">
+  <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/details/professiya-kariera.html">
+  <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/details/professiya-kariera.html">
+  <link rel="alternate" hreflang="ro" href="https://felitzia1669elar.md/details/professiya-kariera.html?lang=ro">
+  <link rel="alternate" hreflang="en" href="https://felitzia1669elar.md/details/professiya-kariera.html?lang=en">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Фелиция 14 / 41">
+  <meta property="og:url" content="https://felitzia1669elar.md/details/professiya-kariera.html">
   <link rel="icon" href="data:,">
   <title>Профессия / Карьера - Фелиция</title>
   <style>
@@ -920,6 +928,54 @@
       });
     }
 
+    function updateDetailSeo(content) {
+      const canonical = new URL(window.location.pathname, window.location.origin);
+      if (currentLang !== "ru") canonical.searchParams.set("lang", currentLang);
+      let canonicalLink = document.head.querySelector('link[rel="canonical"]');
+      if (!canonicalLink) {
+        canonicalLink = document.createElement("link");
+        canonicalLink.rel = "canonical";
+        document.head.appendChild(canonicalLink);
+      }
+      canonicalLink.href = canonical.href;
+      document.querySelectorAll('link[rel="alternate"]').forEach((node) => node.remove());
+      for (const lang of supportedLanguages) {
+        const alternate = document.createElement("link");
+        alternate.rel = "alternate";
+        alternate.hreflang = lang;
+        const alternateUrl = new URL(window.location.pathname, window.location.origin);
+        if (lang !== "ru") alternateUrl.searchParams.set("lang", lang);
+        alternate.href = alternateUrl.href;
+        document.head.appendChild(alternate);
+      }
+      const defaultAlternate = document.createElement("link");
+      defaultAlternate.rel = "alternate";
+      defaultAlternate.hreflang = "x-default";
+      defaultAlternate.href = new URL(window.location.pathname, window.location.origin).href;
+      document.head.appendChild(defaultAlternate);
+      let ogTitle = document.head.querySelector('meta[property="og:title"]');
+      if (!ogTitle) {
+        ogTitle = document.createElement("meta");
+        ogTitle.setAttribute("property", "og:title");
+        document.head.appendChild(ogTitle);
+      }
+      ogTitle.setAttribute("content", `${content.title} - ${detailUi[currentLang].brandName}`);
+      let ogDescription = document.head.querySelector('meta[property="og:description"]');
+      if (!ogDescription) {
+        ogDescription = document.createElement("meta");
+        ogDescription.setAttribute("property", "og:description");
+        document.head.appendChild(ogDescription);
+      }
+      ogDescription.setAttribute("content", `${content.title} - ${detailUi[currentLang].pageDescription}.`);
+      let ogUrl = document.head.querySelector('meta[property="og:url"]');
+      if (!ogUrl) {
+        ogUrl = document.createElement("meta");
+        ogUrl.setAttribute("property", "og:url");
+        document.head.appendChild(ogUrl);
+      }
+      ogUrl.setAttribute("content", canonical.href);
+    }
+
     function setLanguage(lang, updateUrl = false) {
       currentLang = supportedLanguages.includes(lang) ? lang : "ru";
       localStorage.setItem("felitziaLang", currentLang);
@@ -931,6 +987,7 @@
       document.title = `${content.title} - ${ui.brandName}`;
       const description = document.querySelector('meta[name="description"]');
       if (description) description.setAttribute("content", `${content.title} - ${ui.pageDescription}.`);
+      updateDetailSeo(content);
 
       setText('[data-field="label"]', content.label);
       setText('[data-field="title"]', content.title);
