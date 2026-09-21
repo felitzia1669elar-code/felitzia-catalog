@@ -661,23 +661,20 @@
       }
 
       .topbar {
-        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-columns: 1fr;
         align-items: center;
         gap: 8px 12px;
         min-height: 176px;
       }
 
       .hero-quote {
-        max-width: 210px;
+        max-width: min(100%, 260px);
         font-size: 16px;
         line-height: 1.24;
       }
 
       .meta {
-        max-width: 126px;
-        font-size: 16px;
-        line-height: 1.22;
-        overflow-wrap: anywhere;
+        display: none;
       }
 
       .logo-mark {

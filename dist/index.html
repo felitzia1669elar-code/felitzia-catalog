@@ -1021,7 +1021,7 @@
 
       .topbar {
         min-height: 170px;
-        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-columns: 1fr;
         justify-items: stretch;
         align-items: start;
         gap: 10px;
@@ -1039,20 +1039,14 @@
 
       .hero-quote {
         width: auto;
-        max-width: 236px;
+        max-width: min(100%, 278px);
         font-size: 15px;
         line-height: 1.12;
         text-align: left;
       }
 
       .meta {
-        justify-self: end;
-        width: auto;
-        max-width: 138px;
-        padding-top: 0;
-        font-size: 15px;
-        line-height: 1.12;
-        text-align: right;
+        display: none;
       }
 
       .logo-mark {
