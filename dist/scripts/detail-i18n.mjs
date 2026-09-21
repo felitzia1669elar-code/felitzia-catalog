@@ -57,8 +57,8 @@ export const detailPageCopy = {
     label: { ro: "Ce include pachetul", en: "What is included in the package" },
     title: { ro: "Pachetul celor 4 sectiuni principale", en: "Package of 4 main sections" },
     lead: {
-      ro: "Pachetul include 4 analize mari. A cincea sectiune este oferita clientului ca bonus.",
-      en: "The package includes 4 large readings. The fifth section is included as a client bonus.",
+      ro: "4 sectiuni principale in pachet — €200. Bonus: Numele ca leac. Sanatatea poate fi comandata separat — €100.",
+      en: "4 main sections in the package — €200. Bonus: Name as medicine. Health can be ordered separately — €100.",
     },
     visualAlt: {
       ro: "Imaginea vizuala a pachetului Felicia: numerologie, Tarot, astrologie si rune",

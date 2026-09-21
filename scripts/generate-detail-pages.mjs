@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { detailItemCopy, detailPageCopy, detailUi } from "./detail-i18n.mjs";
@@ -20,7 +20,7 @@ const pages = [
     label: "Что входит в пакет",
     title: "Пакет 4 главных раздела",
     price: "€200",
-    lead: "Пакет включает 4 больших разбора. Пятый раздел клиент получает бонусом.",
+    lead: "4 главных раздела в пакете — €200. Бонус: Имя как лекарство. Здоровье можно заказать отдельно — €100.",
     image: "02-paket-4-glavnyh-razdela.png",
     visual: {
       src: "../assets/package-main-visual.png",
@@ -29,9 +29,9 @@ const pages = [
     items: [
       "Программа судьбы",
       "Лабиринт Кармы",
-      "Здоровье",
+      "Астрология",
       "Совместимость",
-      "Бонус: Астрология",
+      "Бонус: Имя как лекарство",
       "Формат 1,5-2 часа",
       "Материал 5-15 страниц",
       "Аудио / видео",
@@ -710,6 +710,14 @@ function renderPage(page) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="${escapeHtml(initial.title)} - ${detailUi.ru.pageDescription}.">
+  <link rel="canonical" href="https://felitzia1669elar.md/details/${page.slug}">
+  <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/details/${page.slug}">
+  <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/details/${page.slug}">
+  <link rel="alternate" hreflang="ro" href="https://felitzia1669elar.md/details/${page.slug}?lang=ro">
+  <link rel="alternate" hreflang="en" href="https://felitzia1669elar.md/details/${page.slug}?lang=en">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Фелиция 14 / 41">
+  <meta property="og:url" content="https://felitzia1669elar.md/details/${page.slug}">
   <link rel="icon" href="data:,">
   <title>${escapeHtml(initial.title)} - ${detailUi.ru.brandName}</title>
   <style>
@@ -1629,8 +1637,28 @@ function renderPage(page) {
 
 mkdirSync(outputDir, { recursive: true });
 
-for (const page of pages) {
-  writeFileSync(join(outputDir, `${page.slug}.html`), renderPage(page));
+const contentOnly = process.argv.includes("--content-only");
+const requested = new Set(process.argv.slice(2).filter(arg => arg !== "--content-only"));
+const selectedPages = requested.size ? pages.filter(page => requested.has(page.slug)) : pages;
+for (const page of selectedPages) {
+  const path = join(outputDir, `${page.slug}.html`);
+  const generated = renderPage(page);
+  let result = generated;
+  // Existing pages can contain scroll scenes and SEO code outside the template.
+  if (contentOnly) {
+    result = readFileSync(path, "utf8");
+    const regions = [
+      /    const pageContent = .*;/,
+      /          <p class="lead" data-field="lead">[^\n]+/,
+      /        <ul class="items" id="detail-items">[\s\S]*?<\/ul>/,
+    ];
+    for (const region of regions) {
+      const replacement = generated.match(region);
+      if (!replacement || !region.test(result)) throw new Error(`Missing content region: ${page.slug}`);
+      result = result.replace(region, () => replacement[0]);
+    }
+  }
+  writeFileSync(path, result);
 }
 
-console.log(`Generated ${pages.length} detail pages.`);
+console.log(`Generated ${selectedPages.length} detail pages.`);
