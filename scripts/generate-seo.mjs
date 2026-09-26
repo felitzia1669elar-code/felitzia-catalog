@@ -1,9 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
+import { homeSeo as homeSearchCopy, detailSeo } from "./seo-copy.mjs";
 
 const site = "https://felitzia1669elar.md";
-const today = "2026-09-21";
+const today = "2026-09-26";
 const languages = ["ru", "ro", "en"];
 const detailDir = "details";
 
@@ -30,6 +31,8 @@ const homeSeo = {
       "numerology, astrology, tarot, runes, compatibility, destiny matrix, karma, ancestral programs, regression numerology, Felitzia consultations",
   },
 };
+
+for (const lang of languages) Object.assign(homeSeo[lang], homeSearchCopy[lang]);
 
 function read(file) {
   return fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n");
@@ -82,6 +85,17 @@ function upsertAdminNoindex(file) {
 
 function upsertIndexSeo(file) {
   let html = read(file);
+  html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeXml(homeSeo.ru.title)}</title>`);
+  html = html.replace(/const seoMeta = .*?;\n/, `const seoMeta = ${JSON.stringify(homeSeo)};\n`);
+  html = html.replace(/<meta property="og:title" content="[^"]*">/, `<meta property="og:title" content="${escapeXml(homeSeo.ru.title)}">`);
+  html = html.replace(/<meta property="og:description" content="[^"]*">/, `<meta property="og:description" content="${escapeXml(homeSeo.ru.description)}">`);
+  html = html.replace(/(<script type="application\/ld\+json" id="site-schema">)(.*?)(<\/script>)/, (_, start, json, end) => {
+    const data = JSON.parse(json);
+    for (const entry of data["@graph"] || []) {
+      if (entry["@type"] === "WebSite") Object.assign(entry, { name: homeSeo.ru.title, description: homeSeo.ru.description });
+    }
+    return start + JSON.stringify(data) + end;
+  });
   html = upsertMetaContent(html, "description", homeSeo.ru.description);
   html = upsertMetaContent(html, "keywords", homeSeo.ru.keywords);
   html = addHeadBlock(
@@ -326,6 +340,35 @@ function upsertDetailSeo(file) {
     );
   }
 
+  const slug = path.basename(file, ".html");
+  const searchCopy = detailSeo[slug];
+  if (!searchCopy) throw new Error(`Missing multilingual SEO copy for ${slug}`);
+  html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeXml(searchCopy.ru.title)}</title>`);
+  html = upsertMetaContent(html, "description", escapeXml(searchCopy.ru.description));
+  for (const key of ["title", "description"]) {
+    const tag = `<meta property="og:${key}" content="${escapeXml(searchCopy.ru[key])}">`;
+    const pattern = new RegExp(`<meta property="og:${key}" content="[^"]*">`);
+    html = pattern.test(html) ? html.replace(pattern, tag) : html.replace("</head>", `  ${tag}\n</head>`);
+  }
+  const declaration = `    const detailSearchMeta = ${JSON.stringify(searchCopy)};`;
+  if (html.includes("const detailSearchMeta = ")) {
+    html = html.replace(/    const detailSearchMeta = .*;/, () => declaration);
+  } else {
+    html = html.replace("    function updateDetailSeo(content) {", `${declaration}
+
+    function updateSearchMetadata() {
+      const seo = detailSearchMeta[currentLang] || detailSearchMeta.ru;
+      document.title = seo.title;
+      document.querySelector('meta[name="description"]').setAttribute("content", seo.description);
+      document.querySelector('meta[property="og:title"]').setAttribute("content", seo.title);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", seo.description);
+    }
+
+    function updateDetailSeo(content) {`);
+  }
+  if (!html.includes("      updateSearchMetadata();")) {
+    html = html.replace("      updateDetailSeo(content);", "      updateDetailSeo(content);\n      updateSearchMetadata();");
+  }
   write(file, html);
 }
 

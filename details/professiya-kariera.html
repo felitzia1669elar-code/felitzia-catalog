@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Профессия / Карьера - подробное описание раздела каталога консультаций Фелиции.">
+  <meta name="description" content="Нумерологический разбор профессии и карьеры: призвание, матрица профессий, самореализация и личные графики. Состав консультации Фелиции и стоимость.">
   <link rel="canonical" href="https://felitzia1669elar.md/details/professiya-kariera">
   <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/details/professiya-kariera">
   <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/details/professiya-kariera">
@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="Фелиция 14 / 41">
   <meta property="og:url" content="https://felitzia1669elar.md/details/professiya-kariera">
   <link rel="icon" href="data:,">
-  <title>Профессия / Карьера - Фелиция</title>
+  <title>Нумерология профессии и карьеры — Фелиция</title>
   <style>
     :root {
       --navy: #08131f;
@@ -758,6 +758,8 @@
     }
   </style>
   <link rel="stylesheet" href="../assets/celestial-theme.css?v=20260907-2">
+  <meta property="og:title" content="Нумерология профессии и карьеры — Фелиция">
+  <meta property="og:description" content="Нумерологический разбор профессии и карьеры: призвание, матрица профессий, самореализация и личные графики. Состав консультации Фелиции и стоимость.">
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">
@@ -925,6 +927,16 @@
       });
     }
 
+    const detailSearchMeta = {"ru":{"title":"Нумерология профессии и карьеры — Фелиция","description":"Нумерологический разбор профессии и карьеры: призвание, матрица профессий, самореализация и личные графики. Состав консультации Фелиции и стоимость."},"ro":{"title":"Numerologie pentru profesie și carieră — Felitzia","description":"Analiză numerologică a carierei: vocație, matricea profesiilor, realizare personală și grafice individuale. Consultații cu Felitzia, detalii și prețuri."},"en":{"title":"Career & Vocation Numerology Reading — Felitzia","description":"Explore career and vocation through numerology with Felitzia: profession matrix, personal fulfilment and individual charts. Consultation details and prices."}};
+
+    function updateSearchMetadata() {
+      const seo = detailSearchMeta[currentLang] || detailSearchMeta.ru;
+      document.title = seo.title;
+      document.querySelector('meta[name="description"]').setAttribute("content", seo.description);
+      document.querySelector('meta[property="og:title"]').setAttribute("content", seo.title);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", seo.description);
+    }
+
     function updateDetailSeo(content) {
       const canonical = new URL(window.location.pathname, window.location.origin);
       if (currentLang !== "ru") canonical.searchParams.set("lang", currentLang);
@@ -985,6 +997,7 @@
       const description = document.querySelector('meta[name="description"]');
       if (description) description.setAttribute("content", `${content.title} - ${ui.pageDescription}.`);
       updateDetailSeo(content);
+      updateSearchMetadata();
 
       setText('[data-field="label"]', content.label);
       setText('[data-field="title"]', content.title);

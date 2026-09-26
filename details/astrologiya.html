@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Астрология - подробное описание раздела каталога консультаций Фелиции.">
+  <meta name="description" content="Астрологическая консультация Фелиции: формула души, динамический гороскоп, солярные карты и астрокартография. Состав разбора, стоимость и запись онлайн.">
   <link rel="canonical" href="https://felitzia1669elar.md/details/astrologiya">
   <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/details/astrologiya">
   <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/details/astrologiya">
@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="Фелиция 14 / 41">
   <meta property="og:url" content="https://felitzia1669elar.md/details/astrologiya">
   <link rel="icon" href="data:,">
-  <title>Астрология - Фелиция</title>
+  <title>Консультация астролога онлайн — Фелиция</title>
   <style>
     :root {
       --navy: #08131f;
@@ -758,6 +758,8 @@
     }
   </style>
   <link rel="stylesheet" href="../assets/celestial-theme.css?v=20260907-2">
+  <meta property="og:title" content="Консультация астролога онлайн — Фелиция">
+  <meta property="og:description" content="Астрологическая консультация Фелиции: формула души, динамический гороскоп, солярные карты и астрокартография. Состав разбора, стоимость и запись онлайн.">
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">
@@ -953,6 +955,16 @@
       });
     }
 
+    const detailSearchMeta = {"ru":{"title":"Консультация астролога онлайн — Фелиция","description":"Астрологическая консультация Фелиции: формула души, динамический гороскоп, солярные карты и астрокартография. Состав разбора, стоимость и запись онлайн."},"ro":{"title":"Consultație de astrologie online — Felitzia","description":"Astrologie cu Felitzia: formula sufletului, horoscop dinamic, revoluție solară și astrocartografie. Află ce include consultația, prețul și cum te programezi."},"en":{"title":"Online Astrology Consultation — Felitzia","description":"Explore astrology with Felitzia: soul formula, dynamic horoscope, solar return charts and astrocartography. Consultation details, prices and online booking."}};
+
+    function updateSearchMetadata() {
+      const seo = detailSearchMeta[currentLang] || detailSearchMeta.ru;
+      document.title = seo.title;
+      document.querySelector('meta[name="description"]').setAttribute("content", seo.description);
+      document.querySelector('meta[property="og:title"]').setAttribute("content", seo.title);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", seo.description);
+    }
+
     function updateDetailSeo(content) {
       const canonical = new URL(window.location.pathname, window.location.origin);
       if (currentLang !== "ru") canonical.searchParams.set("lang", currentLang);
@@ -1013,6 +1025,7 @@
       const description = document.querySelector('meta[name="description"]');
       if (description) description.setAttribute("content", `${content.title} - ${ui.pageDescription}.`);
       updateDetailSeo(content);
+      updateSearchMetadata();
 
       setText('[data-field="label"]', content.label);
       setText('[data-field="title"]', content.title);

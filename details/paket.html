@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Пакет 4 главных раздела - подробное описание раздела каталога консультаций Фелиции.">
+  <meta name="description" content="Пакет Фелиции за €200: программа судьбы, лабиринт кармы, астрология и совместимость. Консультация 1,5–2 часа, материалы и поддержка 30 дней.">
   <link rel="canonical" href="https://felitzia1669elar.md/details/paket">
   <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/details/paket">
   <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/details/paket">
@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="Фелиция 14 / 41">
   <meta property="og:url" content="https://felitzia1669elar.md/details/paket">
   <link rel="icon" href="data:,">
-  <title>Пакет 4 главных раздела - Фелиция</title>
+  <title>Пакет консультаций: нумерология и астрология — Фелиция</title>
   <style>
     :root {
       --navy: #08131f;
@@ -758,7 +758,9 @@
     }
   </style>
   <link rel="stylesheet" href="../assets/celestial-theme.css?v=20260907-2">
-<link rel="stylesheet" href="../scripts/package-journey.css"></head>
+<link rel="stylesheet" href="../scripts/package-journey.css">  <meta property="og:title" content="Пакет консультаций: нумерология и астрология — Фелиция">
+  <meta property="og:description" content="Пакет Фелиции за €200: программа судьбы, лабиринт кармы, астрология и совместимость. Консультация 1,5–2 часа, материалы и поддержка 30 дней.">
+</head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">
     <div class="nav-inner">
@@ -947,6 +949,16 @@
       });
     }
 
+    const detailSearchMeta = {"ru":{"title":"Пакет консультаций: нумерология и астрология — Фелиция","description":"Пакет Фелиции за €200: программа судьбы, лабиринт кармы, астрология и совместимость. Консультация 1,5–2 часа, материалы и поддержка 30 дней."},"ro":{"title":"Pachet de numerologie și astrologie — Felitzia","description":"Pachet Felitzia de €200: programul destinului, labirintul karmei, astrologie și compatibilitate. Consultație de 1,5–2 ore, materiale și suport 30 de zile."},"en":{"title":"Numerology & Astrology Consultation Package — Felitzia","description":"Felitzia's €200 package: destiny program, karma labyrinth, astrology and compatibility. A 1.5–2 hour consultation, materials and 30 days of support."}};
+
+    function updateSearchMetadata() {
+      const seo = detailSearchMeta[currentLang] || detailSearchMeta.ru;
+      document.title = seo.title;
+      document.querySelector('meta[name="description"]').setAttribute("content", seo.description);
+      document.querySelector('meta[property="og:title"]').setAttribute("content", seo.title);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", seo.description);
+    }
+
     function updateDetailSeo(content) {
       const canonical = new URL(window.location.pathname, window.location.origin);
       if (currentLang !== "ru") canonical.searchParams.set("lang", currentLang);
@@ -1007,6 +1019,7 @@
       const description = document.querySelector('meta[name="description"]');
       if (description) description.setAttribute("content", `${content.title} - ${ui.pageDescription}.`);
       updateDetailSeo(content);
+      updateSearchMetadata();
 
       setText('[data-field="label"]', content.label);
       setText('[data-field="title"]', content.title);

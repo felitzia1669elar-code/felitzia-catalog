@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Таро-расклад - подробное описание раздела каталога консультаций Фелиции.">
+  <meta name="description" content="Индивидуальный расклад Таро у Фелиции на конкретный вопрос или ближайший период: разбор карт, ситуации и возможных действий. Стоимость и запись онлайн.">
   <link rel="canonical" href="https://felitzia1669elar.md/details/taro-rasklad">
   <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/details/taro-rasklad">
   <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/details/taro-rasklad">
@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="Фелиция 14 / 41">
   <meta property="og:url" content="https://felitzia1669elar.md/details/taro-rasklad">
   <link rel="icon" href="data:,">
-  <title>Таро-расклад - Фелиция</title>
+  <title>Заказать расклад Таро онлайн — Фелиция</title>
   <style>
     :root {
       --navy: #08131f;
@@ -758,6 +758,8 @@
     }
   </style>
   <link rel="stylesheet" href="../assets/celestial-theme.css?v=20260907-2">
+  <meta property="og:title" content="Заказать расклад Таро онлайн — Фелиция">
+  <meta property="og:description" content="Индивидуальный расклад Таро у Фелиции на конкретный вопрос или ближайший период: разбор карт, ситуации и возможных действий. Стоимость и запись онлайн.">
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">
@@ -932,6 +934,16 @@
       });
     }
 
+    const detailSearchMeta = {"ru":{"title":"Заказать расклад Таро онлайн — Фелиция","description":"Индивидуальный расклад Таро у Фелиции на конкретный вопрос или ближайший период: разбор карт, ситуации и возможных действий. Стоимость и запись онлайн."},"ro":{"title":"Etalare Tarot online — consultație cu Felitzia","description":"Etalare Tarot individuală pentru o întrebare sau perioada următoare: interpretarea cărților, situației și opțiunilor. Prețuri și programări la Felitzia."},"en":{"title":"Book an Online Tarot Reading — Felitzia","description":"Book a personal Tarot reading with Felitzia for a specific question or the coming period. Explore the cards, your situation and options. Details and prices."}};
+
+    function updateSearchMetadata() {
+      const seo = detailSearchMeta[currentLang] || detailSearchMeta.ru;
+      document.title = seo.title;
+      document.querySelector('meta[name="description"]').setAttribute("content", seo.description);
+      document.querySelector('meta[property="og:title"]').setAttribute("content", seo.title);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", seo.description);
+    }
+
     function updateDetailSeo(content) {
       const canonical = new URL(window.location.pathname, window.location.origin);
       if (currentLang !== "ru") canonical.searchParams.set("lang", currentLang);
@@ -992,6 +1004,7 @@
       const description = document.querySelector('meta[name="description"]');
       if (description) description.setAttribute("content", `${content.title} - ${ui.pageDescription}.`);
       updateDetailSeo(content);
+      updateSearchMetadata();
 
       setText('[data-field="label"]', content.label);
       setText('[data-field="title"]', content.title);

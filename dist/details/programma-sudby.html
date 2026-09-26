@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Программа судьбы - подробное описание раздела каталога консультаций Фелиции.">
+  <meta name="description" content="Закажите разбор по дате рождения у Фелиции: программа и матрица судьбы, личные качества, предназначение и жизненные циклы. Состав консультации и запись.">
   <link rel="canonical" href="https://felitzia1669elar.md/details/programma-sudby">
   <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/details/programma-sudby">
   <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/details/programma-sudby">
@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="Фелиция 14 / 41">
   <meta property="og:url" content="https://felitzia1669elar.md/details/programma-sudby">
   <link rel="icon" href="data:,">
-  <title>Программа судьбы - Фелиция</title>
+  <title>Нумерологический разбор по дате рождения — Фелиция</title>
   <style>
     :root {
       --navy: #08131f;
@@ -758,6 +758,8 @@
     }
   </style>
   <link rel="stylesheet" href="../assets/celestial-theme.css?v=20260907-2">
+  <meta property="og:title" content="Нумерологический разбор по дате рождения — Фелиция">
+  <meta property="og:description" content="Закажите разбор по дате рождения у Фелиции: программа и матрица судьбы, личные качества, предназначение и жизненные циклы. Состав консультации и запись.">
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">
@@ -974,6 +976,16 @@
       });
     }
 
+    const detailSearchMeta = {"ru":{"title":"Нумерологический разбор по дате рождения — Фелиция","description":"Закажите разбор по дате рождения у Фелиции: программа и матрица судьбы, личные качества, предназначение и жизненные циклы. Состав консультации и запись."},"ro":{"title":"Analiză numerologică după data nașterii — Felitzia","description":"Consultație de numerologie cu Felitzia: programul și matricea destinului, calități personale, vocație și cicluri de viață. Detalii și programare online."},"en":{"title":"Birth Date Numerology Reading — Felitzia","description":"Book a numerology reading with Felitzia. Explore your birth date, destiny matrix, personal qualities, purpose and life cycles. Consultation details and booking."}};
+
+    function updateSearchMetadata() {
+      const seo = detailSearchMeta[currentLang] || detailSearchMeta.ru;
+      document.title = seo.title;
+      document.querySelector('meta[name="description"]').setAttribute("content", seo.description);
+      document.querySelector('meta[property="og:title"]').setAttribute("content", seo.title);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", seo.description);
+    }
+
     function updateDetailSeo(content) {
       const canonical = new URL(window.location.pathname, window.location.origin);
       if (currentLang !== "ru") canonical.searchParams.set("lang", currentLang);
@@ -1034,6 +1046,7 @@
       const description = document.querySelector('meta[name="description"]');
       if (description) description.setAttribute("content", `${content.title} - ${ui.pageDescription}.`);
       updateDetailSeo(content);
+      updateSearchMetadata();
 
       setText('[data-field="label"]', content.label);
       setText('[data-field="title"]', content.title);

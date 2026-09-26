@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Мантическая практика - подробное описание раздела каталога консультаций Фелиции.">
+  <meta name="description" content="Выберите мантическую практику у Фелиции: руны, символические квадраты, янтры, сигилы и обрядовые куклы. Описание направлений, стоимость и запись.">
   <link rel="canonical" href="https://felitzia1669elar.md/details/manticheskaya-praktika">
   <link rel="alternate" hreflang="x-default" href="https://felitzia1669elar.md/details/manticheskaya-praktika">
   <link rel="alternate" hreflang="ru" href="https://felitzia1669elar.md/details/manticheskaya-praktika">
@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="Фелиция 14 / 41">
   <meta property="og:url" content="https://felitzia1669elar.md/details/manticheskaya-praktika">
   <link rel="icon" href="data:,">
-  <title>Мантическая практика - Фелиция</title>
+  <title>Руны и мантические практики — консультация Фелиции</title>
   <style>
     :root {
       --navy: #08131f;
@@ -758,6 +758,8 @@
     }
   </style>
   <link rel="stylesheet" href="../assets/celestial-theme.css?v=20260907-2">
+  <meta property="og:title" content="Руны и мантические практики — консультация Фелиции">
+  <meta property="og:description" content="Выберите мантическую практику у Фелиции: руны, символические квадраты, янтры, сигилы и обрядовые куклы. Описание направлений, стоимость и запись.">
 </head>
 <body id="top">
   <nav class="site-nav" aria-label="Навигация сайта">
@@ -918,6 +920,16 @@
       });
     }
 
+    const detailSearchMeta = {"ru":{"title":"Руны и мантические практики — консультация Фелиции","description":"Выберите мантическую практику у Фелиции: руны, символические квадраты, янтры, сигилы и обрядовые куклы. Описание направлений, стоимость и запись."},"ro":{"title":"Rune și practici divinatorii — Felitzia","description":"Alege o practică divinatorie cu Felitzia: rune, pătrate simbolice, yantre, sigilii și păpuși rituale. Descrierea serviciilor, prețuri și programări."},"en":{"title":"Runes & Divination Consultations — Felitzia","description":"Explore rune work, symbolic squares, yantras, sigils and ritual dolls with Felitzia. Choose a practice and view consultation details, prices and booking."}};
+
+    function updateSearchMetadata() {
+      const seo = detailSearchMeta[currentLang] || detailSearchMeta.ru;
+      document.title = seo.title;
+      document.querySelector('meta[name="description"]').setAttribute("content", seo.description);
+      document.querySelector('meta[property="og:title"]').setAttribute("content", seo.title);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", seo.description);
+    }
+
     function updateDetailSeo(content) {
       const canonical = new URL(window.location.pathname, window.location.origin);
       if (currentLang !== "ru") canonical.searchParams.set("lang", currentLang);
@@ -978,6 +990,7 @@
       const description = document.querySelector('meta[name="description"]');
       if (description) description.setAttribute("content", `${content.title} - ${ui.pageDescription}.`);
       updateDetailSeo(content);
+      updateSearchMetadata();
 
       setText('[data-field="label"]', content.label);
       setText('[data-field="title"]', content.title);
