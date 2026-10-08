@@ -1218,7 +1218,7 @@
       <div class="scroll-stage">
         <div class="scroll-picture">
         <video class="scroll-film" muted playsinline preload="auto" disablepictureinpicture
-          poster="assets/felitzia-portrait.png" data-src="assets/scroll-video/felitzia-scroll-8s.mp4"
+          poster="assets/felitzia-portrait.webp" data-src="assets/scroll-video/felitzia-scroll-8s.mp4"
           aria-label="Портрет Фелиции и путешествие к планете"></video>
         </div>
         <div class="scroll-shade" aria-hidden="true"></div>
@@ -1331,10 +1331,10 @@
 
   <section id="contact" class="final footer-journey">
     <div class="footer-stage">
-      <img class="footer-first" src="assets/scroll-video/footer-first-frame.jpg" alt="" />
+      <img class="footer-first" src="assets/scroll-video/footer-first-frame.jpg" alt="" loading="lazy" decoding="async" />
       <video class="footer-film" poster="assets/scroll-video/footer-first-frame.jpg" muted playsinline preload="none" disablepictureinpicture
         data-src="assets/scroll-video/felitzia-footer-minimax-5s.mp4" aria-hidden="true"></video>
-      <img class="footer-still" src="assets/scroll-video/footer-final-actual.jpg" alt="" />
+      <img class="footer-still" src="assets/scroll-video/footer-final-actual.jpg" alt="" loading="lazy" decoding="async" />
     <div class="section-inner footer-board">
       <h2 data-i18n="contactTitle">Запись</h2>
       <div class="actions">
@@ -1909,7 +1909,7 @@
     function renderImageCards(items) {
       return items.map((item) => `
         <div class="image-card">
-          <img src="${escapeHtml(item.src)}" alt="${escapeHtml(localize(item.label))}">
+          <img src="${escapeHtml(item.src)}" alt="${escapeHtml(localize(item.label))}" loading="lazy" decoding="async">
           <span>${escapeHtml(localize(item.label))}</span>
         </div>
       `).join("");
@@ -1995,7 +1995,19 @@
     }
 
     function articleHref(post) {
-      return `article.html?lang=${encodeURIComponent(currentLang)}&id=${encodeURIComponent(post.id)}`;
+      const lang = articleLanguages(post).includes(currentLang) ? currentLang : articleLanguages(post)[0];
+      return `article.html?lang=${encodeURIComponent(lang)}&id=${encodeURIComponent(post.id)}`;
+    }
+
+    function articleLanguages(post) {
+      if (post.lang && post.lang !== "all") return [post.lang];
+      const languages = ["ru"];
+      for (const lang of ["ro", "en"]) {
+        const title = post.title && post.title[lang] && post.title[lang].trim();
+        const text = post.text && post.text[lang] && post.text[lang].trim();
+        if (title && text && (title !== post.title.ru.trim() || text !== post.text.ru.trim())) languages.push(lang);
+      }
+      return languages;
     }
 
     function blogPreviewText(post) {
@@ -2013,9 +2025,9 @@
     function renderBlogCards(posts) {
       return posts.map((post) => `
         <a class="blog-card" href="${escapeHtml(articleHref(post))}">
-          <img src="${escapeHtml(post.image)}" alt="${escapeHtml(localize(post.title))}">
+          <img src="${escapeHtml(post.image)}" alt="${escapeHtml(localize(post.title))}" loading="lazy" decoding="async">
           <div class="blog-body">
-            <div class="blog-meta"><span>${escapeHtml(post.date)}</span><span>${escapeHtml(localize(post.category))}</span></div>
+            <div class="blog-meta"><span>${escapeHtml(post.date)}</span><span>${escapeHtml(localize(post.category))}</span>${articleLanguages(post).includes(currentLang) ? "" : "<span>RU</span>"}</div>
             <h3>${escapeHtml(localize(post.title))}</h3>
             <p>${escapeHtml(blogPreviewText(post))}</p>
             <span class="blog-read">${escapeHtml(translations[currentLang].readArticle)}</span>

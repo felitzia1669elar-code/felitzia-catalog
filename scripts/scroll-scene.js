@@ -33,6 +33,8 @@ async function loadScrollVideo(video) {
   const progress = scene.querySelector('.scroll-progress');
   const nav = document.querySelector('.site-nav');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile = matchMedia('(max-width: 680px)');
+  const useScrollVideo = () => !reduced.matches && !mobile.matches;
   const clamp = value => Math.min(1, Math.max(0, value));
   const ease = value => value * value * (3 - 2 * value);
   let raf = 0, target = 0, enabled = false;
@@ -51,6 +53,7 @@ async function loadScrollVideo(video) {
     const navHeight = nav.getBoundingClientRect().height;
     const distance = Math.max(1, scene.offsetHeight - stage.offsetHeight);
     const p = clamp((navHeight - bounds.top) / distance);
+    if (p > .30 && transition.dataset.loading !== 'true') loadScrollVideo(transition);
     // Wide screens keep the complete square portrait until the cosmic frames.
     // Narrow screens retain their existing framing and timeline.
     const wide = matchMedia('(min-width: 1000px)').matches;
@@ -116,7 +119,7 @@ async function loadScrollVideo(video) {
     document.querySelectorAll('.scene-reveal').forEach(el => el.classList.remove('is-waiting'));
   }
   function ready() {
-    if (reduced.matches || !Number.isFinite(film.duration) || enabled) return;
+    if (!useScrollVideo() || !Number.isFinite(film.duration) || enabled) return;
     enabled = true;
     scene.classList.add('is-ready');
     measure();
@@ -142,11 +145,17 @@ async function loadScrollVideo(video) {
   window.addEventListener('scroll', requestRender, { passive: true });
   window.addEventListener('resize', measure, { passive: true });
   new ResizeObserver(measure).observe(nav);
-  reduced.addEventListener('change', () => { fallback(); if (!reduced.matches) { loadScrollVideo(transition); loadScrollVideo(film); } });
-  if (!reduced.matches) {
-    loadScrollVideo(transition);
-    loadScrollVideo(film);
-  } else fallback();
+  function matchMediaChanged() {
+    fallback();
+    if (useScrollVideo()) {
+      if (film.readyState >= 2) ready();
+      else loadScrollVideo(film);
+    }
+  }
+  reduced.addEventListener('change', matchMediaChanged);
+  mobile.addEventListener('change', matchMediaChanged);
+  if (useScrollVideo()) loadScrollVideo(film);
+  else fallback();
 })();
 
 (() => {

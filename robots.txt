@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin.html
 
 Sitemap: https://felitzia1669elar.md/sitemap.xml

@@ -4,7 +4,7 @@ import vm from "node:vm";
 import { homeSeo as homeSearchCopy, detailSeo } from "./seo-copy.mjs";
 
 const site = "https://felitzia1669elar.md";
-const today = "2026-09-26";
+const today = new Date().toISOString().slice(0, 10);
 const languages = ["ru", "ro", "en"];
 const detailDir = "details";
 
@@ -388,6 +388,16 @@ vm.runInContext(read("scripts/blog-data.js"), context);
 const posts = context.window.felitziaDefaultPosts || [];
 const urls = [];
 
+function postLanguages(post) {
+  const languages = ["ru"];
+  for (const lang of ["ro", "en"]) {
+    const title = post.title?.[lang]?.trim();
+    const text = post.text?.[lang]?.trim();
+    if (title && text && (title !== post.title?.ru?.trim() || text !== post.text?.ru?.trim())) languages.push(lang);
+  }
+  return languages;
+}
+
 function languageUrl(pathname, lang) {
   if (pathname.includes("?")) return `${site}${pathname}&lang=${lang}`;
   if (lang === "ru") return `${site}${pathname}`;
@@ -413,9 +423,10 @@ for (const name of fs.readdirSync(detailDir).filter((entry) => entry.endsWith(".
 for (const post of posts) {
   if (!post.id) continue;
   const base = `/article?id=${encodeURIComponent(post.id)}`;
+  const articleLanguages = postLanguages(post);
   const alternates = [
     { lang: "x-default", href: `${site}${base}&lang=ru` },
-    ...languages.map((lang) => ({ lang, href: `${site}${base}&lang=${lang}` })),
+    ...articleLanguages.map((lang) => ({ lang, href: `${site}${base}&lang=${lang}` })),
   ];
   for (const alternate of alternates.filter((entry) => entry.lang !== "x-default")) {
     urls.push({
@@ -448,7 +459,6 @@ ${url.alternates
 
 const robots = `User-agent: *
 Allow: /
-Disallow: /admin.html
 
 Sitemap: ${site}/sitemap.xml
 `;

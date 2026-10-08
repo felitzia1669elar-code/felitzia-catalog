@@ -499,6 +499,17 @@
       return value && (value[currentLang] || value.ru || value.ro || value.en) || "";
     }
 
+    function availablePostLanguages(post) {
+      if (post.lang && post.lang !== "all") return [post.lang];
+      const languages = ["ru"];
+      for (const lang of ["ro", "en"]) {
+        const title = post.title && post.title[lang] && post.title[lang].trim();
+        const text = post.text && post.text[lang] && post.text[lang].trim();
+        if (title && text && (title !== post.title.ru.trim() || text !== post.text.ru.trim())) languages.push(lang);
+      }
+      return languages;
+    }
+
     function escapeHtml(value) {
       return String(value)
         .replaceAll("&", "&amp;")
@@ -588,7 +599,7 @@
       if (articleId) canonical.searchParams.set("id", articleId);
       canonical.searchParams.set("lang", currentLang);
       document.querySelectorAll('link[rel="alternate"]').forEach((node) => node.remove());
-      for (const lang of supportedLanguages) {
+      for (const lang of availablePostLanguages(post)) {
         const alternate = document.createElement("link");
         alternate.rel = "alternate";
         alternate.hreflang = lang;
@@ -601,7 +612,7 @@
       const defaultAlternate = document.createElement("link");
       defaultAlternate.rel = "alternate";
       defaultAlternate.hreflang = "x-default";
-      defaultAlternate.href = canonical.href;
+      defaultAlternate.href = new URL(`/article?id=${encodeURIComponent(articleId)}&lang=ru`, window.location.origin).href;
       document.head.appendChild(defaultAlternate);
       let link = document.head.querySelector('link[rel="canonical"]');
       if (!link) {
@@ -610,7 +621,7 @@
         document.head.appendChild(link);
       }
       link.href = canonical.href;
-      const description = localize(post.text) || "Статья блога Фелиции о нумерологии, циклах и совместимости.";
+      const description = (localize(post.text) || "Статья блога Фелиции о нумерологии, циклах и совместимости.").replace(/\s+/g, " ").trim().slice(0, 170);
       setMeta('meta[name="description"]', "content", description);
       setMeta('meta[property="og:title"]', "content", title + " - " + ui[currentLang].brandName);
       setMeta('meta[property="og:description"]', "content", description);
@@ -636,6 +647,12 @@
         return;
       }
 
+      if (!availablePostLanguages(post).includes(currentLang)) {
+        currentLang = availablePostLanguages(post)[0];
+        window.history.replaceState(null, "", `/article?id=${encodeURIComponent(articleId)}&lang=${currentLang}`);
+        updateLanguageLinks();
+      }
+
       const title = localize(post.title);
       document.title = `${title} - ${ui[currentLang].brandName}`;
       updateSeo(post, title);
@@ -658,7 +675,13 @@
 
     document.querySelectorAll(".lang-button").forEach((button) => {
       button.addEventListener("click", () => {
-        currentLang = supportedLanguages.includes(button.dataset.lang) ? button.dataset.lang : "ru";
+        const requestedLang = supportedLanguages.includes(button.dataset.lang) ? button.dataset.lang : "ru";
+        const post = allPosts().find((entry) => entry.id === articleId);
+        if (post && !availablePostLanguages(post).includes(requestedLang)) {
+          window.location.href = `/?lang=${requestedLang}#blog`;
+          return;
+        }
+        currentLang = requestedLang;
         params.set("lang", currentLang);
         if (articleId) params.set("id", articleId);
         window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
