@@ -17,7 +17,7 @@ body::before {
   border-radius: inherit;
   opacity: var(--cosmos-ink);
   mix-blend-mode: multiply;
-  background: url("celestial-drawn-background-v4.png") var(--cosmos-pattern-position) /
+  background: url("celestial-drawn-background-v4.webp") var(--cosmos-pattern-position) /
     var(--cosmos-tile-width) var(--cosmos-tile-height) repeat;
   /* Matching masks keep every repetition clear of cut-off illustrations. */
   -webkit-mask-image:
@@ -45,7 +45,7 @@ body::before {
   background-color: #fffdf8;
   background-image:
     linear-gradient(rgba(255, 253, 248, var(--cosmos-veil)), rgba(255, 253, 248, var(--cosmos-veil))),
-    url("celestial-drawn-background-v4.png");
+    url("celestial-drawn-background-v4.webp");
   background-size: auto, var(--cosmos-tile-width) var(--cosmos-tile-height);
   background-position: 0 0, var(--cosmos-pattern-position);
   background-repeat: repeat;
