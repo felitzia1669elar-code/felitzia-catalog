@@ -451,6 +451,7 @@
       : (supportedLanguages.includes(localStorage.getItem("felitziaLang")) ? localStorage.getItem("felitziaLang") : "ru");
     const articleId = params.get("id") || "";
     let serverPosts = [];
+    let serverPostsLoaded = false;
 
     const ui = {
       ru: {
@@ -532,7 +533,9 @@
         if (!response.ok) throw new Error("posts api failed");
         const data = await response.json();
         serverPosts = Array.isArray(data.posts) ? data.posts : [];
+        serverPostsLoaded = true;
       } catch {
+        serverPostsLoaded = false;
         const posts = JSON.parse(localStorage.getItem(storageKey) || "[]");
         serverPosts = Array.isArray(posts) ? posts : [];
       }
@@ -555,7 +558,7 @@
     function allPosts() {
       const clientPosts = readClientPosts().map(normalizePost);
       const defaultPosts = Array.isArray(window.felitziaDefaultPosts) ? window.felitziaDefaultPosts.map(normalizePost) : [];
-      return [...clientPosts, ...defaultPosts];
+      return serverPostsLoaded ? clientPosts : [...clientPosts, ...defaultPosts];
     }
 
     function articleParagraphs(post) {

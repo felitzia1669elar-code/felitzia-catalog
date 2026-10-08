@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Локальный кабинет Фелиции для добавления новостей в блог сайта.">
+  <meta name="description" content="Кабинет Фелиции для публикации и редактирования статей блога.">
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="data:,">
   <title>Кабинет Фелиции</title>
@@ -186,6 +186,29 @@
       resize: vertical;
     }
 
+    .language-fields {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .language-fields summary {
+      color: var(--sapphire);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .language-fields p {
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .language-fields .fields {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
     .form-actions {
       display: flex;
       flex-wrap: wrap;
@@ -322,7 +345,7 @@
 
     <section id="admin-app" class="hidden">
       <h1>Кабинет Фелиции</h1>
-      <p class="lead">Добавление новостей и материалов в блог. Каждая запись публикуется во всех языковых версиях сайта без автоматического перевода и открывается как отдельная статья.</p>
+      <p class="lead">Публикуйте новые статьи и редактируйте прежние. Русский текст обязателен; переводы добавляйте отдельно.</p>
 
       <div class="layout">
       <section class="panel post-editor" id="post-editor">
@@ -334,17 +357,35 @@
             <input id="post-date" type="date">
           </label>
           <label>
-            Рубрика
+            Рубрика (RU)
             <input id="post-category" type="text" placeholder="Новость">
           </label>
           <label>
-            Заголовок
+            Заголовок (RU)
             <input id="post-title" type="text" placeholder="Название новости">
           </label>
           <label>
-            Описание
+            Описание (RU)
             <textarea id="post-text" placeholder="Текст новости или материала"></textarea>
           </label>
+          <details class="language-fields" id="ro-fields">
+            <summary>Румынская версия (RO)</summary>
+            <p>Добавьте заголовок и описание, чтобы у статьи появился отдельный адрес на румынском языке.</p>
+            <div class="fields">
+              <label>Рубрика (RO)<input id="post-category-ro" type="text"></label>
+              <label>Заголовок (RO)<input id="post-title-ro" type="text"></label>
+              <label>Описание (RO)<textarea id="post-text-ro"></textarea></label>
+            </div>
+          </details>
+          <details class="language-fields" id="en-fields">
+            <summary>Английская версия (EN)</summary>
+            <p>Добавьте заголовок и описание, чтобы у статьи появился отдельный адрес на английском языке.</p>
+            <div class="fields">
+              <label>Рубрика (EN)<input id="post-category-en" type="text"></label>
+              <label>Заголовок (EN)<input id="post-title-en" type="text"></label>
+              <label>Описание (EN)<textarea id="post-text-en"></textarea></label>
+            </div>
+          </details>
           <label>
             Ссылка на изображение
             <input id="post-image-url" type="text" placeholder="assets/home-main-visual.png">
@@ -371,10 +412,6 @@
   </main>
 
   <script>
-    const passwordHash = "9e638655b8b28add146688125e82f45af78b9ebb961a9afa503b2e47d590e4db";
-    const loginKey = "felitziaAdminAccess";
-    const passwordKey = "felitziaAdminPassword";
-    const storageKey = "felitziaBlogPosts";
     let postsCache = [];
     const loginPanel = document.getElementById("login-panel");
     const adminApp = document.getElementById("admin-app");
@@ -393,11 +430,6 @@
 
     dateInput.valueAsDate = new Date();
 
-    async function sha256(value) {
-      const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
-      return Array.from(new Uint8Array(buffer)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
-    }
-
     async function setAccess(isAllowed) {
       loginPanel.classList.toggle("hidden", isAllowed);
       adminApp.classList.toggle("hidden", !isAllowed);
@@ -408,21 +440,23 @@
     loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       loginStatus.textContent = "";
-      const password = document.getElementById("admin-password").value;
-      if (await sha256(password) === passwordHash) {
-        sessionStorage.setItem(loginKey, "1");
-        sessionStorage.setItem(passwordKey, password);
+      try {
+        const response = await fetch("/api/admin-session", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ password: document.getElementById("admin-password").value })
+        });
         document.getElementById("admin-password").value = "";
+        if (!response.ok) throw new Error("invalid password");
         await setAccess(true);
-      } else {
-        loginStatus.textContent = "Неверный пароль.";
+      } catch {
+        loginStatus.textContent = "Не удалось войти. Проверьте пароль и соединение.";
       }
     });
 
-    logoutButton.addEventListener("click", () => {
-      sessionStorage.removeItem(loginKey);
-      sessionStorage.removeItem(passwordKey);
-      setAccess(false);
+    logoutButton.addEventListener("click", async () => {
+      await fetch("/api/admin-session", { method: "DELETE" }).catch(() => {});
+      await setAccess(false);
     });
 
     async function loadPosts() {
@@ -432,11 +466,9 @@
         if (!response.ok) throw new Error("posts api failed");
         const data = await response.json();
         postsCache = Array.isArray(data.posts) ? data.posts : [];
-        cachePosts(postsCache);
       } catch {
-        const posts = JSON.parse(localStorage.getItem(storageKey) || "[]");
-        postsCache = Array.isArray(posts) ? posts : [];
-        message("Сервер временно недоступен. Показаны локальные записи.");
+        postsCache = [];
+        message("Сервер временно недоступен. Повторите загрузку страницы.");
       }
       renderPosts();
     }
@@ -449,15 +481,11 @@
       const response = await fetch("/api/posts", {
         method: "PUT",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          password: sessionStorage.getItem(passwordKey) || "",
-          post
-        })
+        body: JSON.stringify({ post })
       });
       if (!response.ok) throw new Error("save failed");
       const data = await response.json();
       postsCache = Array.isArray(data.posts) ? data.posts : getPosts();
-      cachePosts(postsCache);
       renderPosts();
     }
 
@@ -465,15 +493,11 @@
       const response = await fetch("/api/posts", {
         method: "DELETE",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          password: sessionStorage.getItem(passwordKey) || "",
-          id
-        })
+        body: JSON.stringify({ id })
       });
       if (!response.ok) throw new Error("delete failed");
       const data = await response.json();
       postsCache = Array.isArray(data.posts) ? data.posts : getPosts().filter((post) => post.id !== id);
-      cachePosts(postsCache);
       renderPosts();
     }
 
@@ -503,13 +527,9 @@
       });
     }
 
-    function allLanguageText(text) {
-      return { ru: text, ro: text, en: text };
-    }
-
-    function localizedText(value, fallback = "") {
-      if (typeof value === "string") return value;
-      return value?.ru || value?.ro || value?.en || fallback;
+    function localizedText(value, lang = "ru") {
+      if (typeof value === "string") return lang === "ru" ? value : "";
+      return value?.[lang] || "";
     }
 
     function setFormMode(isEditing) {
@@ -517,16 +537,10 @@
       saveButton.textContent = isEditing ? "Сохранить изменения" : "Сохранить";
     }
 
-    function cachePosts(posts) {
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(posts));
-      } catch {
-        localStorage.removeItem(storageKey);
-      }
-    }
-
     function clearForm() {
       form.reset();
+      document.getElementById("ro-fields").open = false;
+      document.getElementById("en-fields").open = false;
       document.getElementById("post-id").value = "";
       dateInput.valueAsDate = new Date();
       setFormMode(false);
@@ -542,11 +556,15 @@
         const title = typeof post.title === "string" ? post.title : (post.title.ru || post.title.ro || post.title.en || "Без названия");
         const text = typeof post.text === "string" ? post.text : (post.text.ru || post.text.ro || post.text.en || "");
         const category = typeof post.category === "string" ? post.category : (post.category.ru || post.category.ro || post.category.en || "Новость");
+        const languages = ["RU", ...["ro", "en"].filter((lang) => localizedText(post.title, lang) && localizedText(post.text, lang)
+          && (localizedText(post.title, lang) !== localizedText(post.title) || localizedText(post.text, lang) !== localizedText(post.text)))
+          .map((lang) => lang.toUpperCase())].join(" · ");
+        const preview = text.length > 240 ? `${text.slice(0, 240).trim()}…` : text;
         return `
           <article class="post">
-            <div class="post-meta"><span>${escapeHtml(post.date || "")}</span><span>${escapeHtml(post.lang || "ru")}</span><span>${escapeHtml(category)}</span></div>
+            <div class="post-meta"><span>${escapeHtml(post.date || "")}</span><span>${escapeHtml(languages)}</span><span>${escapeHtml(category)}</span></div>
             <h3>${escapeHtml(title)}</h3>
-            <p>${escapeHtml(text)}</p>
+            <p>${escapeHtml(preview)}</p>
             <div class="post-actions">
               <a class="post-link" href="article.html?lang=ru&id=${escapeHtml(encodeURIComponent(post.id))}" target="_blank" rel="noreferrer">Открыть статью</a>
               <button type="button" data-edit="${escapeHtml(post.id)}">Редактировать</button>
@@ -563,6 +581,11 @@
       const title = document.getElementById("post-title").value.trim();
       const text = document.getElementById("post-text").value.trim();
       const category = document.getElementById("post-category").value.trim() || "Новость";
+      const languages = ["ro", "en"];
+      if (languages.some((lang) => Boolean(document.getElementById(`post-title-${lang}`).value.trim()) !== Boolean(document.getElementById(`post-text-${lang}`).value.trim()))) {
+        message("Для перевода заполните и заголовок, и описание.");
+        return;
+      }
       if (!title || !text) {
         message("Заполни заголовок и описание.");
         return;
@@ -574,14 +597,11 @@
         id,
         lang: "all",
         date: dateInput.value,
-        category: allLanguageText(category),
-        title: allLanguageText(title),
-        text: allLanguageText(text),
+        category: { ru: category, ...Object.fromEntries(languages.map((lang) => [lang, document.getElementById(`post-category-${lang}`).value.trim()])) },
+        title: { ru: title, ...Object.fromEntries(languages.map((lang) => [lang, document.getElementById(`post-title-${lang}`).value.trim()])) },
+        text: { ru: text, ...Object.fromEntries(languages.map((lang) => [lang, document.getElementById(`post-text-${lang}`).value.trim()])) },
         image: image || "assets/home-main-visual.png"
       };
-      const index = posts.findIndex((entry) => entry.id === id);
-      if (index >= 0) posts[index] = post;
-      else posts.unshift(post);
       saveButton.disabled = true;
       saveButton.textContent = "Сохраняю...";
       try {
@@ -608,6 +628,8 @@
       const deleteId = deleteButton?.dataset.delete;
       const posts = getPosts();
       if (deleteId) {
+        const post = posts.find((entry) => entry.id === deleteId);
+        if (!window.confirm(`Удалить статью «${localizedText(post?.title)}» с сайта?`)) return;
         deleteButton.disabled = true;
         deleteButton.textContent = "Удаляю...";
         message("Удаляю запись...");
@@ -628,6 +650,15 @@
         document.getElementById("post-category").value = localizedText(post.category);
         titleInput.value = localizedText(post.title);
         document.getElementById("post-text").value = localizedText(post.text);
+        for (const lang of ["ro", "en"]) {
+          const translated = localizedText(post.title, lang) && localizedText(post.text, lang)
+            && (localizedText(post.title, lang) !== localizedText(post.title)
+              || localizedText(post.text, lang) !== localizedText(post.text));
+          document.getElementById(`post-category-${lang}`).value = translated ? localizedText(post.category, lang) : "";
+          document.getElementById(`post-title-${lang}`).value = translated ? localizedText(post.title, lang) : "";
+          document.getElementById(`post-text-${lang}`).value = translated ? localizedText(post.text, lang) : "";
+          document.getElementById(`${lang}-fields`).open = Boolean(translated);
+        }
         document.getElementById("post-image-url").value = post.image || "";
         setFormMode(true);
         editorPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -636,7 +667,10 @@
       }
     });
 
-    setAccess(sessionStorage.getItem(loginKey) === "1");
+    fetch("/api/admin-session", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : { authenticated: false })
+      .then((data) => setAccess(Boolean(data.authenticated)))
+      .catch(() => setAccess(false));
   </script>
 </body>
 </html>

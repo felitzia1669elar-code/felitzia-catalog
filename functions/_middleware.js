@@ -1,4 +1,5 @@
 import { homeSeo, detailSeo } from "../scripts/seo-copy.mjs";
+import { readBlogData } from "./_blog-store.js";
 
 const SITE = "https://felitzia1669elar.md";
 const LANGUAGES = ["ru", "ro", "en"];
@@ -158,24 +159,12 @@ async function localizeHome(html, lang, context) {
 }
 
 async function readPosts(context) {
-  const jsonUrl = new URL("/blog-posts.json", context.request.url);
-  const staticResponse = await context.env.ASSETS.fetch(jsonUrl);
-  const staticPosts = staticResponse.ok ? await staticResponse.json() : [];
-  let serverPosts = [];
-  if (context.env.BLOG_POSTS) {
-    try {
-      const stored = await context.env.BLOG_POSTS.get("posts", "json");
-      if (Array.isArray(stored)) serverPosts = stored;
-    } catch {
-      // Static posts remain readable if KV is temporarily unavailable.
-    }
+  try {
+    return (await readBlogData(context.env, context.request.url)).posts;
+  } catch {
+    const response = await context.env.ASSETS.fetch(new URL("/blog-posts.json", context.request.url));
+    return response.ok ? await response.json() : [];
   }
-  const seen = new Set();
-  return [...serverPosts, ...staticPosts].filter((post) => {
-    if (!post?.id || seen.has(post.id)) return false;
-    seen.add(post.id);
-    return true;
-  });
 }
 
 function renderArticle(post, lang) {
@@ -248,6 +237,7 @@ async function sitemapResponse(context) {
   const original = await context.next();
   if (!original.ok) return original;
   let xml = await original.text();
+  xml = xml.replace(/\s*<url>\s*<loc>[^<]*\/article(?:\.html)?(?:\?|&amp;)[\s\S]*?<\/url>/g, "");
   const existing = new Set([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1].replaceAll("&amp;", "&")));
   const entries = [];
   for (const post of await readPosts(context)) {

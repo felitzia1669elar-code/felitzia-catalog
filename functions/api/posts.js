@@ -1,109 +1,67 @@
-const POSTS_KEY = "posts";
-const PASSWORD_HASH = "9e638655b8b28add146688125e82f45af78b9ebb961a9afa503b2e47d590e4db";
-const JSON_HEADERS = {
-  "content-type": "application/json; charset=utf-8",
-  "cache-control": "no-store"
-};
+import { isAdminSession } from "../_admin-auth.js";
+import { deleteBlogPost, readBlogData, upsertBlogPost } from "../_blog-store.js";
 
 function json(body, status = 200) {
-  return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
+  });
 }
 
-function textValue(value, fallback = "", maxLength = 5000) {
-  return typeof value === "string" ? value.trim().slice(0, maxLength) : fallback;
+function string(value, max = 5000) {
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
-function imageValue(value) {
-  const image = textValue(value, "", 8000000);
-  if (!image) return "assets/home-main-visual.png";
-  if (image.startsWith("data:image/") && image.length < 10000) return "assets/home-main-visual.png";
-  if (image.startsWith("data:image/")) return image;
-  return image.slice(0, 1000);
+function localized(value, max = 5000) {
+  if (typeof value === "string") return { ru: string(value, max), ro: "", en: "" };
+  return Object.fromEntries(["ru", "ro", "en"].map((lang) => [lang, string(value?.[lang], max)]));
 }
 
-function localized(value, fallback) {
-  if (typeof value === "string") {
-    const text = textValue(value, fallback);
-    return { ru: text, ro: text, en: text };
-  }
-  return {
-    ru: textValue(value && value.ru, fallback),
-    ro: textValue(value && value.ro, fallback),
-    en: textValue(value && value.en, fallback)
-  };
-}
-
-function normalizePost(post) {
-  const id = textValue(post && post.id) || String(Date.now());
-  const title = localized(post && post.title, "Новая запись");
-  const text = localized(post && post.text, "");
+function normalizePost(input, previous) {
+  const id = string(input?.id, 150) || crypto.randomUUID();
+  const title = localized(input?.title, 200);
+  const text = localized(input?.text);
+  if (!title.ru || !text.ru) return null;
+  const category = localized(input?.category, 100);
+  const rawImage = string(input?.image, 8_000_000);
+  const image = rawImage.startsWith("data:image/") && rawImage.length >= 10000
+    ? rawImage : rawImage.startsWith("data:") ? "assets/home-main-visual.png"
+    : rawImage.slice(0, 1000) || "assets/home-main-visual.png";
   return {
     id,
     lang: "all",
-    date: textValue(post && post.date) || new Date().toISOString().slice(0, 10),
-    category: localized(post && post.category, "Новость"),
+    date: /^\d{4}-\d{2}-\d{2}$/.test(input?.date) ? input.date : new Date().toISOString().slice(0, 10),
+    category: {
+      ru: category.ru || "Новость",
+      ro: category.ro || (title.ro && text.ro ? "Articol" : ""),
+      en: category.en || (title.en && text.en ? "Article" : ""),
+    },
     title,
     text,
-    content: post && post.content ? localized(post.content, "") : null,
-    image: imageValue(post && post.image),
-    updatedAt: new Date().toISOString()
+    content: previous?.content || null,
+    image,
+    updatedAt: new Date().toISOString(),
   };
 }
 
-async function sha256(value) {
-  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
-  return Array.from(new Uint8Array(buffer)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
-}
-
-async function isAuthorized(request) {
-  const body = await request.clone().json().catch(() => ({}));
-  const password = typeof body.password === "string" ? body.password : "";
-  return (await sha256(password)) === PASSWORD_HASH ? body : null;
-}
-
-async function readPosts(env) {
-  const posts = await env.BLOG_POSTS.get(POSTS_KEY, "json");
-  return Array.isArray(posts) ? posts : [];
-}
-
-async function writePosts(env, posts) {
-  await env.BLOG_POSTS.put(POSTS_KEY, JSON.stringify(posts.slice(0, 100)));
-}
-
-function upsertPost(posts, post) {
-  const normalized = normalizePost(post);
-  const index = posts.findIndex((entry) => entry.id === normalized.id);
-  if (index >= 0) {
-    const nextPosts = [...posts];
-    nextPosts[index] = normalized;
-    return nextPosts;
-  }
-  return [normalized, ...posts];
-}
-
-export async function onRequestGet({ env }) {
-  return json({ posts: await readPosts(env) });
+export async function onRequestGet({ request, env }) {
+  return json({ posts: (await readBlogData(env, request.url)).posts });
 }
 
 export async function onRequestPut({ request, env }) {
-  const body = await isAuthorized(request);
-  if (!body) return json({ error: "unauthorized" }, 401);
-
-  const posts = Array.isArray(body.posts)
-    ? body.posts.map(normalizePost)
-    : upsertPost(await readPosts(env), body.post || {});
-  await writePosts(env, posts);
-  return json({ posts });
+  if (!await isAdminSession(request, env)) return json({ error: "unauthorized" }, 401);
+  const { post } = await request.json().catch(() => ({}));
+  if (!post || typeof post !== "object") return json({ error: "missing post" }, 400);
+  const data = await readBlogData(env, request.url);
+  const previous = data.posts.find((entry) => entry.id === post.id);
+  const normalized = normalizePost(post, previous);
+  if (!normalized) return json({ error: "Russian title and description required" }, 400);
+  return json({ posts: await upsertBlogPost(env, request.url, normalized) });
 }
 
 export async function onRequestDelete({ request, env }) {
-  const body = await isAuthorized(request);
-  if (!body) return json({ error: "unauthorized" }, 401);
-
-  const id = textValue(body.id);
-  if (!id) return json({ error: "missing id" }, 400);
-
-  const posts = (await readPosts(env)).filter((post) => post.id !== id);
-  await writePosts(env, posts);
-  return json({ posts });
+  if (!await isAdminSession(request, env)) return json({ error: "unauthorized" }, 401);
+  const { id } = await request.json().catch(() => ({}));
+  if (!string(id, 150)) return json({ error: "missing id" }, 400);
+  return json({ posts: await deleteBlogPost(env, request.url, id) });
 }

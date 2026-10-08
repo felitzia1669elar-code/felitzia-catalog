@@ -35,7 +35,7 @@ async function request(pathname, { post = null, host = "felitzia1669elar.md" } =
         throw new Error(`Unexpected asset ${pathname}`);
       },
     },
-    BLOG_POSTS: { async get() { return post ? [post] : []; } },
+    BLOG_POSTS: { async get(key) { return key === "posts" && post ? [post] : []; } },
   };
   const next = async () => {
     let file;

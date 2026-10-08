@@ -22,10 +22,14 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check functions/_middleware.js
+          node --check functions/api/posts.js
+          node --check functions/api/admin-session.js
           node --check scripts/scroll-scene.js
           node --check scripts/generate-seo.mjs
       - name: Check SEO routes and article assets
         run: node scripts/test-seo.mjs
+      - name: Check blog editing and authentication
+        run: node scripts/test-blog.mjs
       - name: Check generated home content
         run: |
           node scripts/extract-home-content.mjs
