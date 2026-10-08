@@ -102,6 +102,9 @@ assert.equal(response.status, 301);
 assert.equal(response.headers.get("location"), `https://felitzia1669elar.md/article?id=${staticPosts[0].id}&lang=ru`);
 
 assert.equal((await request("/article?id=unknown")).status, 404);
+response = await request("/article");
+assert.equal(response.status, 301);
+assert.equal(response.headers.get("location"), "https://felitzia1669elar.md/#blog");
 assert.equal((await request("/unknown-path")).status, 404);
 assert.equal((await request("/details/unknown")).status, 404);
 response = await request("/", { host: "www.felitzia1669elar.md" });

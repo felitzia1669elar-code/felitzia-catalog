@@ -193,7 +193,7 @@ function renderArticle(post, lang) {
 
 async function articleResponse(context, url) {
   const id = url.searchParams.get("id");
-  if (!id) return new Response("Article not found", { status: 404 });
+  if (!id) return Response.redirect(`${SITE}/#blog`, 301);
   const posts = await readPosts(context);
   const post = posts.find((entry) => entry.id === id);
   if (!post) return new Response("Article not found", { status: 404 });
