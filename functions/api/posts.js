@@ -1,5 +1,5 @@
 const POSTS_KEY = "posts";
-const PASSWORD_HASH = "c0815050ab5352d75afa91bab57d6d72e46680ace2ad6d08a78ad58ccd3ec35f";
+const PASSWORD_HASH = "9e638655b8b28add146688125e82f45af78b9ebb961a9afa503b2e47d590e4db";
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
   "cache-control": "no-store"
